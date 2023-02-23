@@ -12,4 +12,4 @@ add_library(qserializer INTERFACE)
 target_include_directories(qserializer INTERFACE ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(qserializer INTERFACE Qt6::Core)
 
-add_subdirectory(examples/simple)
+add_subdirectory(example)

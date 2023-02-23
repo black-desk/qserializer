@@ -1,15 +1,14 @@
-/* vim: set ft=cpp: */
-
 #pragma once
 
 #include <QList>
 #include <QObject>
 #include <QString>
 
+#include "Base"
 #include "Page"
 #include "QSerializer"
 
-class Book : public QObject {
+class Book : public Base {
         Q_OBJECT;
         Q_PROPERTY(QString title MEMBER m_title);
         Q_PROPERTY(QList<QSharedPointer<Page> > pages MEMBER m_pages);

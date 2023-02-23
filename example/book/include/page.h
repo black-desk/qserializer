@@ -1,10 +1,9 @@
-/* vim: set ft=cpp: */
-
 #pragma once
 
+#include "Base"
 #include "QSerializer"
 
-class Page : public QObject {
+class Page : public Base {
         Q_OBJECT;
         Q_PROPERTY(int number MEMBER m_number);
 
