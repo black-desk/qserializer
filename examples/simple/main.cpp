@@ -6,20 +6,24 @@
 
 int main()
 {
-        Page p;
-        p.m_number = 1;
+        QSharedPointer<Page> p(new Page());
+        p->m_number = 1;
+
         QVariant v;
-        v.setValue(&p);
+        v.setValue(p);
         qDebug() << QJsonObject::fromVariantMap(v.toMap());
 
-        Book book;
-        book.m_title = "title";
-        book.m_pages.push_back(&p);
+        QSharedPointer<Book> book(new Book());
+        book->m_title = "title";
+        book->m_pages.push_back(p);
 
-        book.m_dict["a"] = &p;
+        book->m_dict["a"] = p;
 
-        v.setValue(&book);
-        qDebug() << QJsonObject::fromVariantMap(v.toMap());
+        v.setValue(book);
+        auto object = QJsonObject::fromVariantMap(v.toMap());
+        qDebug() << object;
+
+        qDebug() << object.toVariantMap();
 
         return 0;
 }
