@@ -84,8 +84,7 @@ class QSerializer {
 
                         v = QVariantList();
                         if (v.canConvert(metaProp.type())) {
-                                if (!metaProp.write(ret.data(),
-                                                    it.value().toList())) {
+                                if (!metaProp.write(ret.data(), it.value())) {
                                         qWarning().noquote()
                                                 << QString("Failed to write \"%1\", maybe missing converter")
                                                            .arg(metaPropName);
@@ -95,8 +94,7 @@ class QSerializer {
 
                         v = QVariantMap();
                         if (v.canConvert(metaProp.type())) {
-                                if (!metaProp.write(ret.data(),
-                                                    it.value().toMap())) {
+                                if (!metaProp.write(ret.data(), it.value())) {
                                         qWarning().noquote()
                                                 << QString("Failed to write \"%1\", maybe missing converter")
                                                            .arg(metaPropName);
