@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Base"
+#include "base.hpp"
 #include "QSerializer"
 
 class Page : public Base {

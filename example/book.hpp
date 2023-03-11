@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QString>
 
-#include "Base"
-#include "Page"
+#include "base.hpp"
+#include "page.hpp"
 #include "QSerializer"
 
 class Book : public Base {

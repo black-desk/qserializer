@@ -2,8 +2,8 @@
 #include <QJsonObject>
 #include <QVariant>
 
-#include "Book"
-#include "Page"
+#include "book.hpp"
+#include "page.hpp"
 
 int main()
 {
@@ -21,14 +21,17 @@ int main()
         })")
                                                             .toUtf8());
 
-        QSharedPointer<Book> book(new Book());
-        auto map = doc.object().toVariantMap();
-        QMetaType::convert(QMetaType::fromType<QVariantMap>(), &map,
-                           QMetaType::fromType<QSharedPointer<Book> >(), &book);
-        QMetaType::convert(QMetaType::fromType<QSharedPointer<Book> >(), &book,
-                           QMetaType::fromType<QVariantMap>(), &map);
+        QSharedPointer<Book> book;
 
-        qDebug() << QJsonObject::fromVariantMap(map);
+        QVariant v = doc.object().toVariantMap();
+        book = v.value<QSharedPointer<Book>>();
+
+        qDebug() << "title:" << book->m_title;
+
+        v.fromValue(book);
+
+        qDebug() << v.toMap();
+        qDebug() << QJsonObject::fromVariantMap(v.toMap());
 
         return 0;
 }

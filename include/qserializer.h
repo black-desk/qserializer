@@ -1,13 +1,15 @@
 #pragma once
 
-#include <mutex>
-
+#include <QDebug>
 #include <QMap>
 #include <QMetaObject>
 #include <QMetaProperty>
 #include <QMetaType>
+#include <QSharedPointer>
+#include <mutex>
 
-template <typename T> class QSerializer {
+template <typename T>
+class QSerializer {
     public:
         static void registerConverter()
         {
@@ -38,7 +40,6 @@ template <typename T> class QSerializer {
                 auto ret = QVariantMap{};
                 for (int i = qObjectMetaObject->propertyCount();
                      i < metaObject->propertyCount(); i++) {
-
                         const char *k = metaObject->property(i).name();
                         QVariant v = metaObject->property(i).read(from.data());
                         if (v.canConvert<QString>()) {
@@ -70,25 +71,36 @@ template <typename T> class QSerializer {
                                 continue;
                         }
 
-                        QMetaType metaPropType = metaProp.metaType();
+                        QVariant v = QString();
 
-                        if (QMetaType::canConvert(QMetaType::fromType<QString>(),
-                                                  metaPropType)) {
-                                metaProp.write(ret.data(), it.value());
+                        if (v.canConvert(metaProp.type())) {
+                                if (!metaProp.write(ret.data(), it.value())) {
+                                        qWarning().noquote()
+                                                << QString("Failed to write \"%1\", maybe missing converter")
+                                                           .arg(metaPropName);
+                                }
                                 continue;
                         }
 
-                        if (QMetaType::canConvert(
-                                    QMetaType::fromType<QVariantList>(),
-                                    metaPropType)) {
-                                metaProp.write(ret.data(), it.value().toList());
+                        v = QVariantList();
+                        if (v.canConvert(metaProp.type())) {
+                                if (!metaProp.write(ret.data(),
+                                                    it.value().toList())) {
+                                        qWarning().noquote()
+                                                << QString("Failed to write \"%1\", maybe missing converter")
+                                                           .arg(metaPropName);
+                                }
                                 continue;
                         }
 
-                        if (QMetaType::canConvert(
-                                    QMetaType::fromType<QVariantMap>(),
-                                    metaPropType)) {
-                                metaProp.write(ret.data(), it.value().toMap());
+                        v = QVariantMap();
+                        if (v.canConvert(metaProp.type())) {
+                                if (!metaProp.write(ret.data(),
+                                                    it.value().toMap())) {
+                                        qWarning().noquote()
+                                                << QString("Failed to write \"%1\", maybe missing converter")
+                                                           .arg(metaPropName);
+                                }
                                 continue;
                         }
                 }
@@ -127,7 +139,8 @@ template <typename T> class QSerializer {
         {
                 auto ret = QMap<QString, QSharedPointer<T> >{};
                 for (auto it = map.begin(); it != map.end(); it++) {
-                        ret.insert(it.key(), QVariantMapToT(it.value().toMap()));
+                        ret.insert(it.key(),
+                                   QVariantMapToT(it.value().toMap()));
                 }
                 return ret;
         }
@@ -135,11 +148,11 @@ template <typename T> class QSerializer {
 
 template <typename T>
 const QMetaObject *const QSerializer<T>::qObjectMetaObject =
-        QMetaType::fromType<QObject*>().metaObject();
+        QMetaType::fromType<QObject *>().metaObject();
 
 template <typename T>
 const QMetaObject *const QSerializer<T>::metaObject =
-        QMetaType::fromType<T*>().metaObject();
+        QMetaType::fromType<T *>().metaObject();
 
 #define Q_DECLARE_SERIALIZER(T)                  \
         Q_DECLARE_METATYPE(T *);                 \
@@ -149,7 +162,7 @@ const QMetaObject *const QSerializer<T>::metaObject =
                 static int _ = init();           \
         };
 
-#define Q_REGISTER_SERIALIZER(T)                                     \
+#define Q_REGISTER_SERIALIZER(T, ...)                                \
         namespace QSerializerPrivateNamespace##T                     \
         {                                                            \
                 int init()                                           \
@@ -157,6 +170,7 @@ const QMetaObject *const QSerializer<T>::metaObject =
                         static std::once_flag __flag;                \
                         std::call_once(__flag, []() {                \
                                 QSerializer<T>::registerConverter(); \
+                                __VA_ARGS__;                         \
                         });                                          \
                         return 0;                                    \
                 }                                                    \
