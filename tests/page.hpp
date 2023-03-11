@@ -1,7 +1,7 @@
 #pragma once
 
-#include "base.hpp"
 #include "QSerializer"
+#include "base.hpp"
 
 class Page : public Base {
         Q_OBJECT;

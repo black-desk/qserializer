@@ -1,12 +1,13 @@
 #pragma once
 
+#include <mutex>
+
 #include <QDebug>
 #include <QMap>
 #include <QMetaObject>
 #include <QMetaProperty>
 #include <QMetaType>
 #include <QSharedPointer>
-#include <mutex>
 
 template <typename T>
 class QSerializer {
