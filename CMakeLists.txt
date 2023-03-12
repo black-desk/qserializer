@@ -17,8 +17,14 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt5 REQUIRED COMPONENTS Core)
 
 add_library(qserilizer INTERFACE)
-target_sources(qserilizer PUBLIC ./include/QSerializer ./include/qserializer.h)
-target_link_libraries(qserilizer INTERFACE Qt5::Core)
+target_sources(
+  qserilizer
+  PUBLIC ./include/QSerializer ./include/qserializer.h
+)
+target_link_libraries(
+  qserilizer
+  INTERFACE Qt5::Core
+)
 
 include(CTest)
 if(BUILD_TESTING)
