@@ -80,6 +80,9 @@ QVariantMap QSerializer<T>::TtoQVariantMap(QSharedPointer<T> from)
                         ret.insert(k, v.value<QVariantMap>());
                         continue;
                 }
+                qWarning().noquote()
+                        << QString("Failed to insert \"%1\", maybe missing converter")
+                                   .arg(k);
         }
         return ret;
 }
