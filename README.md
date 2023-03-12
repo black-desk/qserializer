@@ -1,11 +1,12 @@
 # QSerializer
 
-A qt helper header only library for (de)serializing QSharedPointer\<QObject\>
-into/from QVariantMap. Also support (de)serializing
-QList\<QSharedPointer\<QObject\>\> / QMap\<QString,QObject\> into/from
-QVariantList/QVariantMap.
+A simple file header-only qt helper library for serializing/deserializing
+QSharedPointer\<QObject\> into/from QVariantMap. Also support
+serializing/deserializing QList\<QSharedPointer\<QObject\>\> and
+QMap\<QString, QSharedPointer\<QObject\>\> into/from QVariantList and
+QVariantMap.
 
 As QVariantMap and QVariantList can easily be converted to/from Qt JSON types
-and QDBusArgument, this library should be good enough to go.
+and QDBusArgument, this library should be good enough for common usage.
 
-Check tests for usage examples.
+Check tests for coding examples.
