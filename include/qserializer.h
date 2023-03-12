@@ -12,7 +12,7 @@
 template <typename T>
 class QSerializer {
     public:
-        static void registerConverter();
+        static void registerConverters();
 
     private:
         static const QMetaObject *const qObjectMetaObject;
@@ -33,7 +33,7 @@ class QSerializer {
 };
 
 template <typename T>
-void QSerializer<T>::registerConverter()
+void QSerializer<T>::registerConverters()
 {
         QMetaType::registerConverter<QSharedPointer<T>, QVariantMap>(
                 TtoQVariantMap);
@@ -158,16 +158,16 @@ QSerializer<T>::QVariantMapToQMapT(QVariantMap map)
                 static int _ = init();           \
         };
 
-#define Q_REGISTER_SERIALIZER(T, ...)                                \
-        namespace QSerializerPrivateNamespace##T                     \
-        {                                                            \
-                int init()                                           \
-                {                                                    \
-                        static std::once_flag __flag;                \
-                        std::call_once(__flag, []() {                \
-                                QSerializer<T>::registerConverter(); \
-                                __VA_ARGS__;                         \
-                        });                                          \
-                        return 0;                                    \
-                }                                                    \
+#define Q_REGISTER_SERIALIZER(T, ...)                                 \
+        namespace QSerializerPrivateNamespace##T                      \
+        {                                                             \
+                int init()                                            \
+                {                                                     \
+                        static std::once_flag __flag;                 \
+                        std::call_once(__flag, []() {                 \
+                                QSerializer<T>::registerConverters(); \
+                                __VA_ARGS__;                          \
+                        });                                           \
+                        return 0;                                     \
+                }                                                     \
         }

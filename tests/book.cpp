@@ -1,3 +1,5 @@
 #include "book.hpp"
 
-Q_REGISTER_SERIALIZER(Book);
+#include "custom_converter.hpp"
+
+Q_REGISTER_SERIALIZER(Book, { registerQListQStringConveter(); });

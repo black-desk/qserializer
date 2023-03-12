@@ -23,6 +23,11 @@ TEST(QSerializer, Basic)
                         "string1",
                         "string2",
                         "string3"
+                ],
+                "list2": [
+                        "string1",
+                        "string2",
+                        "string3"
                 ]
         })")
                                   .toUtf8();
@@ -42,10 +47,14 @@ TEST(QSerializer, Basic)
         ASSERT_EQ(book->m_dict.size(), 2);
         ASSERT_EQ(book->m_dict["page1"]->m_number, 1);
         ASSERT_EQ(book->m_dict["page2"]->m_number, 2);
-        ASSERT_EQ(book->m_list.size(), 3);
-        ASSERT_EQ(book->m_list[0], "string1");
-        ASSERT_EQ(book->m_list[1], "string2");
-        ASSERT_EQ(book->m_list[2], "string3");
+        ASSERT_EQ(book->m_list1.size(), 3);
+        ASSERT_EQ(book->m_list1[0], "string1");
+        ASSERT_EQ(book->m_list1[1], "string2");
+        ASSERT_EQ(book->m_list1[2], "string3");
+        ASSERT_EQ(book->m_list2.size(), 3);
+        ASSERT_EQ(book->m_list2[0], "string1");
+        ASSERT_EQ(book->m_list2[1], "string2");
+        ASSERT_EQ(book->m_list2[2], "string3");
 
         auto vmap = v.fromValue(book).toMap();
         ASSERT_EQ(vmap.value("title").toString(), "Some title");
@@ -70,9 +79,14 @@ TEST(QSerializer, Basic)
                           .value("number")
                           .toInt(),
                   2);
+        ASSERT_EQ(vmap.value("list").toStringList().size(), 3);
         ASSERT_EQ(vmap.value("list").toStringList()[0], "string1");
         ASSERT_EQ(vmap.value("list").toStringList()[1], "string2");
         ASSERT_EQ(vmap.value("list").toStringList()[2], "string3");
+        ASSERT_EQ(vmap.value("list2").toStringList().size(), 3);
+        ASSERT_EQ(vmap.value("list2").toStringList()[0], "string1");
+        ASSERT_EQ(vmap.value("list2").toStringList()[1], "string2");
+        ASSERT_EQ(vmap.value("list2").toStringList()[2], "string3");
 
         auto jsonObject = QJsonObject::fromVariantMap(vmap);
 
@@ -88,6 +102,11 @@ TEST(QSerializer, Basic)
                         "page2": { "number": 2, "base": "" }
                 },
                 "list": [
+                        "string1",
+                        "string2",
+                        "string3"
+                ],
+                "list2": [
                         "string1",
                         "string2",
                         "string3"
@@ -111,8 +130,12 @@ TEST(QSerializer, Basic)
         ASSERT_EQ(book2->m_dict.size(), 2);
         ASSERT_EQ(book2->m_dict["page1"]->m_number, 1);
         ASSERT_EQ(book2->m_dict["page2"]->m_number, 2);
-        ASSERT_EQ(book->m_list.size(), 3);
-        ASSERT_EQ(book2->m_list[0], "string1");
-        ASSERT_EQ(book2->m_list[1], "string2");
-        ASSERT_EQ(book2->m_list[2], "string3");
+        ASSERT_EQ(book->m_list1.size(), 3);
+        ASSERT_EQ(book2->m_list1[0], "string1");
+        ASSERT_EQ(book2->m_list1[1], "string2");
+        ASSERT_EQ(book2->m_list1[2], "string3");
+        ASSERT_EQ(book->m_list2.size(), 3);
+        ASSERT_EQ(book2->m_list2[0], "string1");
+        ASSERT_EQ(book2->m_list2[1], "string2");
+        ASSERT_EQ(book2->m_list2[2], "string3");
 }
