@@ -68,7 +68,18 @@ QVariantMap QSerializer<T>::TtoQVariantMap(QSharedPointer<T> from)
              i < metaObject->propertyCount(); i++) {
                 const char *k = metaObject->property(i).name();
                 QVariant v = metaObject->property(i).read(from.data());
-                ret.insert(k, v);
+                if (v.canConvert<QString>()) {
+                        ret.insert(k, v);
+                        continue;
+                }
+                if (v.canConvert<QVariantList>()) {
+                        ret.insert(k, v.value<QVariantList>());
+                        continue;
+                }
+                if (v.canConvert<QVariantMap>()) {
+                        ret.insert(k, v.value<QVariantMap>());
+                        continue;
+                }
         }
         return ret;
 }
