@@ -11,4 +11,4 @@ class Page : public Base {
         int m_number;
 };
 
-Q_DECLARE_SERIALIZER(Page);
+QSERIALIZER_DECLARE(Page);

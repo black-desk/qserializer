@@ -28,7 +28,11 @@ TEST(QSerializer, Basic)
                         "string1",
                         "string2",
                         "string3"
-                ]
+                ],
+                "dict2": {
+                        "111": {},
+                        "222": {}
+                }
         })")
                                   .toUtf8();
 
@@ -55,6 +59,8 @@ TEST(QSerializer, Basic)
         ASSERT_EQ(book->m_list2[0], "string1");
         ASSERT_EQ(book->m_list2[1], "string2");
         ASSERT_EQ(book->m_list2[2], "string3");
+        ASSERT_EQ(book->m_dict2.size(), 2);
+        ASSERT_EQ(book->m_dict2["111"]->m_title, "");
 
         auto vmap = v.fromValue(book).toMap();
         ASSERT_EQ(vmap.value("title").toString(), "Some title");
@@ -87,6 +93,8 @@ TEST(QSerializer, Basic)
         ASSERT_EQ(vmap.value("list2").toStringList()[0], "string1");
         ASSERT_EQ(vmap.value("list2").toStringList()[1], "string2");
         ASSERT_EQ(vmap.value("list2").toStringList()[2], "string3");
+        ASSERT_EQ(vmap.value("dict2").toMap().size(), 2);
+        ASSERT_EQ(vmap.value("dict2").toMap()["111"].toMap().size(), 7);
 
         auto jsonObject = QJsonObject::fromVariantMap(vmap);
 
@@ -110,7 +118,27 @@ TEST(QSerializer, Basic)
                         "string1",
                         "string2",
                         "string3"
-                ]
+                ],
+                "dict2": {
+                        "111": {
+                                "base": "",
+                                "title": "",
+                                "pages": [],
+                                "dict": {},
+                                "list": [],
+                                "list2": [],
+                                "dict2": {}
+                        },
+                        "222": {
+                                "base": "",
+                                "title": "",
+                                "pages": [],
+                                "dict": {},
+                                "list": [],
+                                "list2": [],
+                                "dict2": {}
+                        }
+                }
         })")
                                     .toUtf8();
         doc = QJsonDocument::fromJson(expectedJson, &err);

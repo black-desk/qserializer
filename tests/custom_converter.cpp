@@ -6,8 +6,7 @@
 
 void registerQListQStringConveter()
 {
-        static std::once_flag flag;
-        std::call_once(flag, []() {
+        static int _ = []() -> int {
                 QMetaType::registerConverter<QList<QString>, QVariantList>(
                         [](const QList<QString> &from) -> QVariantList {
                                 return QVariant(QStringList(from)).toList();
@@ -16,5 +15,6 @@ void registerQListQStringConveter()
                         [](const QVariantList &from) -> QList<QString> {
                                 return QVariant(from).value<QStringList>();
                         });
-        });
+                return _;
+        }();
 }

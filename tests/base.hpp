@@ -12,4 +12,4 @@ class Base : public QObject {
         QString m_base;
 };
 
-Q_DECLARE_SERIALIZER(Base);
+QSERIALIZER_DECLARE(Base);

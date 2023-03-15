@@ -15,41 +15,36 @@ class QSerializer {
         static void registerConverters();
 
     private:
+        typedef QSharedPointer<T> P;
+
         static const QMetaObject *const qObjectMetaObject;
         static const QMetaObject *const metaObject;
-        static QVariantMap TtoQVariantMap(QSharedPointer<T> from);
-        static QSharedPointer<T> QVariantMapToT(const QVariantMap &map);
+        static QVariantMap PToQVariantMap(P from);
+        static P QVariantMapToP(const QVariantMap &map);
 
-        static QVariantList
-        QListTToQVariantList(QList<QSharedPointer<T> > list);
+        static QVariantList PListToQVariantList(QList<P> list);
 
-        static QList<QSharedPointer<T> >
-        QVariantListToQListT(QVariantList list);
+        static QList<P> QVariantListToPList(QVariantList list);
 
-        static QVariantMap
-        QMapTToQVariantMap(QMap<QString, QSharedPointer<T> > map);
-        static QMap<QString, QSharedPointer<T> >
-        QVariantMapToQMapT(QVariantMap map);
+        static QVariantMap PStrMapToQVariantMap(QMap<QString, P> map);
+        static QMap<QString, P> QVariantMapToPStrMap(QVariantMap map);
 };
 
 template <typename T>
 void QSerializer<T>::registerConverters()
 {
-        QMetaType::registerConverter<QSharedPointer<T>, QVariantMap>(
-                TtoQVariantMap);
-        QMetaType::registerConverter<QVariantMap, QSharedPointer<T> >(
-                QVariantMapToT);
+        QMetaType::registerConverter<P, QVariantMap>(PToQVariantMap);
+        QMetaType::registerConverter<QVariantMap, P>(QVariantMapToP);
 
-        QMetaType::registerConverter<QList<QSharedPointer<T> >, QVariantList>(
-                QListTToQVariantList);
-        QMetaType::registerConverter<QVariantList, QList<QSharedPointer<T> > >(
-                QVariantListToQListT);
+        QMetaType::registerConverter<QList<P>, QVariantList>(
+                PListToQVariantList);
+        QMetaType::registerConverter<QVariantList, QList<P> >(
+                QVariantListToPList);
 
-        QMetaType::registerConverter<QMap<QString, QSharedPointer<T> >,
-                                     QVariantMap>(QMapTToQVariantMap);
-        QMetaType::registerConverter<QVariantMap,
-                                     QMap<QString, QSharedPointer<T> > >(
-                QVariantMapToQMapT);
+        QMetaType::registerConverter<QMap<QString, P>, QVariantMap>(
+                PStrMapToQVariantMap);
+        QMetaType::registerConverter<QVariantMap, QMap<QString, P> >(
+                QVariantMapToPStrMap);
 }
 
 template <typename T>
@@ -61,7 +56,7 @@ const QMetaObject *const QSerializer<T>::metaObject =
         QMetaType::fromType<T *>().metaObject();
 
 template <typename T>
-QVariantMap QSerializer<T>::TtoQVariantMap(QSharedPointer<T> from)
+QVariantMap QSerializer<T>::PToQVariantMap(P from)
 {
         auto ret = QVariantMap{};
         for (int i = qObjectMetaObject->propertyCount();
@@ -86,10 +81,11 @@ QVariantMap QSerializer<T>::TtoQVariantMap(QSharedPointer<T> from)
         }
         return ret;
 }
+
 template <typename T>
-QSharedPointer<T> QSerializer<T>::QVariantMapToT(const QVariantMap &map)
+QSharedPointer<T> QSerializer<T>::QVariantMapToP(const QVariantMap &map)
 {
-        QSharedPointer<T> ret(new T());
+        P ret(new T());
         for (int i = metaObject->propertyOffset();
              i < metaObject->propertyCount(); i++) {
                 QMetaProperty metaProp = metaObject->property(i);
@@ -110,67 +106,67 @@ QSharedPointer<T> QSerializer<T>::QVariantMapToT(const QVariantMap &map)
 }
 
 template <typename T>
-QVariantList
-QSerializer<T>::QListTToQVariantList(QList<QSharedPointer<T> > list)
+QVariantList QSerializer<T>::PListToQVariantList(QList<P> list)
 {
         auto ret = QVariantList{};
         for (auto const &item : list) {
-                ret.push_back(TtoQVariantMap(item));
+                ret.push_back(PToQVariantMap(item));
         }
         return ret;
 }
 
 template <typename T>
-QList<QSharedPointer<T> >
-QSerializer<T>::QVariantListToQListT(QVariantList list)
+QList<QSharedPointer<T> > QSerializer<T>::QVariantListToPList(QVariantList list)
 {
-        auto ret = QList<QSharedPointer<T> >{};
+        auto ret = QList<P>{};
         for (auto const &item : list) {
-                ret.push_back(QVariantMapToT(item.toMap()));
+                ret.push_back(QVariantMapToP(item.toMap()));
         }
         return ret;
 }
 
 template <typename T>
-QVariantMap
-QSerializer<T>::QMapTToQVariantMap(QMap<QString, QSharedPointer<T> > map)
+QVariantMap QSerializer<T>::PStrMapToQVariantMap(QMap<QString, P> map)
 {
         auto ret = QVariantMap{};
         for (auto it = map.begin(); it != map.end(); it++) {
-                ret.insert(it.key(), TtoQVariantMap(it.value()));
+                ret.insert(it.key(), PToQVariantMap(it.value()));
         }
         return ret;
 }
 
 template <typename T>
 QMap<QString, QSharedPointer<T> >
-QSerializer<T>::QVariantMapToQMapT(QVariantMap map)
+QSerializer<T>::QVariantMapToPStrMap(QVariantMap map)
 {
-        auto ret = QMap<QString, QSharedPointer<T> >{};
+        auto ret = QMap<QString, P>{};
         for (auto it = map.begin(); it != map.end(); it++) {
-                ret.insert(it.key(), QVariantMapToT(it.value().toMap()));
+                ret.insert(it.key(), QVariantMapToP(it.value().toMap()));
         }
         return ret;
 }
 
-#define Q_DECLARE_SERIALIZER(T)                  \
-        Q_DECLARE_METATYPE(T *);                 \
+#define QSERIALIZER_DECLARE(T)   \
+        Q_DECLARE_METATYPE(T *); \
+        QSERIALIZER_INIT(T);
+
+#define QSERIALIZER_INIT(T)                      \
         namespace QSerializerPrivateNamespace##T \
         {                                        \
                 int init();                      \
                 static int _ = init();           \
         };
 
-#define Q_REGISTER_SERIALIZER(T, ...)                                 \
+#define QSERIALIZER_INIT_IMPL(T, ...)                                 \
         namespace QSerializerPrivateNamespace##T                      \
         {                                                             \
                 int init()                                            \
                 {                                                     \
-                        static std::once_flag __flag;                 \
-                        std::call_once(__flag, []() {                 \
+                        static int _ = []() -> int {                  \
                                 QSerializer<T>::registerConverters(); \
                                 __VA_ARGS__;                          \
-                        });                                           \
-                        return 0;                                     \
+                                return 0;                             \
+                        }();                                          \
+                        return _;                                     \
                 }                                                     \
         }

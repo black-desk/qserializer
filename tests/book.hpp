@@ -15,6 +15,7 @@ class Book : public Base {
         Q_PROPERTY(QMap<QString, QSharedPointer<Page> > dict MEMBER m_dict);
         Q_PROPERTY(QStringList list MEMBER m_list1);
         Q_PROPERTY(QList<QString> list2 MEMBER m_list2);
+        Q_PROPERTY(QMap<QString, QSharedPointer<Book> > dict2 MEMBER m_dict2);
 
     public:
         QString m_title;
@@ -25,6 +26,7 @@ class Book : public Base {
         // You need a custom converter registered to make QSerializer work,
         // check book.cpp for details.
         QList<QString> m_list2;
+        QMap<QString, QSharedPointer<Book> > m_dict2;
 };
 
-Q_DECLARE_SERIALIZER(Book);
+QSERIALIZER_DECLARE(Book);
