@@ -6,7 +6,7 @@ target_sources(
 )
 target_link_libraries(
   tests
-  PRIVATE qserilizer GTest::gtest_main
+  PRIVATE qserializer GTest::gtest_main
 )
 
 gtest_discover_tests(tests)

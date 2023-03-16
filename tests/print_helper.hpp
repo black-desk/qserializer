@@ -6,7 +6,8 @@
 #include <QString>
 
 template <typename T>
-std::enable_if_t<!std::is_same<T, std::string>::value, std::ostream &>
+typename std::enable_if<!std::is_same<T, std::string>::value,
+                        std::ostream &>::type
 operator<<(std::ostream &os, const T &x)
 {
         QString buf;

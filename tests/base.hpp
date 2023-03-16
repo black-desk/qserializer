@@ -1,8 +1,7 @@
 #pragma once
 
 #include <QObject>
-
-#include "QSerializer"
+#include <qserializer/qserializer.h>
 
 class Base : public QObject {
         Q_OBJECT;

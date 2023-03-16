@@ -3,8 +3,8 @@
 #include <QList>
 #include <QObject>
 #include <QString>
+#include <qserializer/qserializer.h>
 
-#include "QSerializer"
 #include "base.hpp"
 #include "page.hpp"
 

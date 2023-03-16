@@ -1,3 +1,3 @@
 #include "page.hpp"
 
-QSERIALIZER_INIT_IMPL(Page);
+QSERIALIZER_IMPL(Page);

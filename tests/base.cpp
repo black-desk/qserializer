@@ -1,3 +1,3 @@
 #include "base.hpp"
 
-QSERIALIZER_INIT_IMPL(Base);
+QSERIALIZER_IMPL(Base);

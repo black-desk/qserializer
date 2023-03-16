@@ -1,7 +1,5 @@
 #pragma once
 
-#include <mutex>
-
 #include <QDebug>
 #include <QMap>
 #include <QMetaObject>
@@ -59,6 +57,10 @@ template <typename T>
 QVariantMap QSerializer<T>::PToQVariantMap(P from)
 {
         auto ret = QVariantMap{};
+        if (from.isNull()) {
+                return ret;
+        }
+
         for (int i = qObjectMetaObject->propertyCount();
              i < metaObject->propertyCount(); i++) {
                 const char *k = metaObject->property(i).name();
@@ -75,6 +77,7 @@ QVariantMap QSerializer<T>::PToQVariantMap(P from)
                         ret.insert(k, v.value<QVariantMap>());
                         continue;
                 }
+                Q_ASSERT(false);
                 qWarning().noquote()
                         << QString("Failed to insert \"%1\", maybe missing converter")
                                    .arg(k);
@@ -97,6 +100,7 @@ QSharedPointer<T> QSerializer<T>::QVariantMapToP(const QVariantMap &map)
                 }
 
                 if (!metaProp.write(ret.data(), it.value())) {
+                        Q_ASSERT(false);
                         qWarning().noquote()
                                 << QString("Failed to write \"%1\", maybe missing converter")
                                            .arg(metaPropName);
@@ -146,18 +150,14 @@ QSerializer<T>::QVariantMapToPStrMap(QVariantMap map)
         return ret;
 }
 
-#define QSERIALIZER_DECLARE(T)   \
-        Q_DECLARE_METATYPE(T *); \
-        QSERIALIZER_INIT(T);
-
-#define QSERIALIZER_INIT(T)                      \
+#define QSERIALIZER_DECLARE(T)                   \
         namespace QSerializerPrivateNamespace##T \
         {                                        \
                 int init();                      \
                 static int _ = init();           \
         };
 
-#define QSERIALIZER_INIT_IMPL(T, ...)                                 \
+#define QSERIALIZER_IMPL(T, ...)                                      \
         namespace QSerializerPrivateNamespace##T                      \
         {                                                             \
                 int init()                                            \
