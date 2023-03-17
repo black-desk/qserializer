@@ -34,12 +34,12 @@ const QDBusArgument &move_out(const QDBusArgument &args, T &x)
 
 }
 #define QSERIALIZER_DECLARE_DBUS(T)                                       \
-        [[maybe_unused]] static inline const QDBusArgument &operator<<(   \
+        [[maybe_unused]] inline const QDBusArgument &operator<<(          \
                 QDBusArgument &args, const QSharedPointer<T> &x)          \
         {                                                                 \
                 return qserializer::move_in<QSharedPointer<T>>(args, x);  \
         }                                                                 \
-        [[maybe_unused]] static inline const QDBusArgument &operator>>(   \
+        [[maybe_unused]] inline const QDBusArgument &operator>>(          \
                 const QDBusArgument &args, QSharedPointer<T> &x)          \
         {                                                                 \
                 return qserializer::move_out<QSharedPointer<T>>(args, x); \
