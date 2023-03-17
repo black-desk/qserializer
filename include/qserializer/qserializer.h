@@ -153,16 +153,16 @@ QSerializer<T>::QVariantMapToPStrMap(QVariantMap map)
 #define QSERIALIZER_DECLARE(T)                   \
         namespace QSerializerPrivateNamespace##T \
         {                                        \
-                int init();                      \
-                static int _ = init();           \
+                char init();                     \
+                static char _ = init();          \
         };
 
 #define QSERIALIZER_IMPL(T, ...)                                      \
         namespace QSerializerPrivateNamespace##T                      \
         {                                                             \
-                int init()                                            \
+                char init()                                           \
                 {                                                     \
-                        static int _ = []() -> int {                  \
+                        static char _ = []() -> char {                \
                                 QSerializer<T>::registerConverters(); \
                                 __VA_ARGS__;                          \
                                 return 0;                             \
