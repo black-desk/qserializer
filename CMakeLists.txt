@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.13.4)
 project(qserializer LANGUAGES CXX)
 
 # for private headers
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 # for generate private headers
-include_directories(${CMAKE_BINARY_DIR}/include)
+include_directories(${CMAKE_BINARY_DIR}/src)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -19,7 +19,7 @@ find_package(Qt5 REQUIRED COMPONENTS Core DBus)
 add_library(qserializer INTERFACE)
 target_sources(
   qserializer
-  PUBLIC include/qserializer/qserializer.h include/qserializer/qserializer_dbus.h
+  INTERFACE include/qserializer/qserializer.h include/qserializer/qserializer_dbus.h
 )
 target_link_libraries(
   qserializer
@@ -27,7 +27,7 @@ target_link_libraries(
 )
 target_include_directories(
   qserializer
-  INTERFACE .
+  INTERFACE ./include
 )
 
 add_subdirectory(examples)

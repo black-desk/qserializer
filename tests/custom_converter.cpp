@@ -1,8 +1,11 @@
 #include "custom_converter.hpp"
 
-#include <mutex>
-
-#include <QVariantList>
+#include <QList>        // for QList
+#include <QMetaType>    // for QMetaType
+#include <QString>      // for QString
+#include <QStringList>  // for QStringList
+#include <QVariant>     // for QVariant
+#include <QVariantList> // for QVariantList
 
 void registerQListQStringConveter()
 {

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <QDBusMetaType>
-#include <qserializer/qserializer.h>
+
+#include "qserializer.h"
 
 namespace qserializer
 {

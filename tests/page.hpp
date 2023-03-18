@@ -1,8 +1,10 @@
 #pragma once
 
-#include <qserializer/qserializer.h>
+#include <QObject>                   // for Q_OBJECT, Q_PROPERTY
+#include <QString>                   // for QString
+#include <qserializer/qserializer.h> // for QSERIALIZER_DECLARE
 
-#include "base.hpp"
+#include "base.hpp" // for Base
 
 class Page : public Base {
         Q_OBJECT;

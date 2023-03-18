@@ -1,12 +1,18 @@
 #pragma once
 
-#include <QList>
-#include <QObject>
-#include <QString>
-#include <qserializer/qserializer.h>
+#include <QList>          // for QList
+#include <QMap>           // for QMap
+#include <QObject>        // for Q_PROPERTY, Q_OBJECT
+#include <QSharedPointer> // for QSharedPointer
+#include <QString>        // for QString
+#include <QStringList>    // for QStringList
 
-#include "base.hpp"
-#include "page.hpp"
+#include "base.hpp"                  // for Base
+#include "qserializer/qserializer.h" // for QSERIALIZER_DECLARE
+
+class Page;
+template <class T>
+class QSharedPointer;
 
 class Book : public Base {
         Q_OBJECT;

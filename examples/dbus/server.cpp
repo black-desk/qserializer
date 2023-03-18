@@ -1,8 +1,14 @@
 #include "server.h"
 
-#include <qcoreapplication.h>
+#include <QCoreApplication> // for QCoreApplication
+#include <QDBusConnection>  // for QDBusConnection
+#include <QSharedPointer>   // for QSharedPointer
 
-#include "serveradaptor.h"
+#include "response.h"      // for Response
+#include "serveradaptor.h" // for DBusServerAdaptor
+
+template <class T>
+class QSharedPointer;
 
 Server::Server(QObject *parent)
         : QObject(parent)

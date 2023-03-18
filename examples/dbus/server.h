@@ -1,8 +1,12 @@
 #pragma once
 
-#include <QObject>
+#include <QMap>    // for QMap
+#include <QObject> // for Q_CLASSINFO, QObject, Q_OBJECT, slots
+#include <QString> // for QString
 
-#include "response.h"
+class Response;
+template <class T>
+class QSharedPointer;
 
 class Server : public QObject {
         Q_OBJECT;
