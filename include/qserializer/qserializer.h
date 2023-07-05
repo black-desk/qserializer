@@ -10,12 +10,16 @@
 template <typename T>
 class QSerializer {
     public:
+        static_assert(!std::is_pointer<T>::value,
+                      "QSerializer shouldn't instantiation with a pointer.");
+        static_assert(!std::is_base_of<QObject, T>::value,
+                      "QSerializer shouldn't instantiation with a QObject.");
+
         static void registerConverters();
 
     private:
         typedef QSharedPointer<T> P;
 
-        static const QMetaObject *const qObjectMetaObject;
         static const QMetaObject *const metaObject;
         static QVariantMap PToQVariantMap(P from);
         static P QVariantMapToP(const QVariantMap &map);
@@ -46,10 +50,6 @@ void QSerializer<T>::registerConverters()
 }
 
 template <typename T>
-const QMetaObject *const QSerializer<T>::qObjectMetaObject =
-        QMetaType::fromType<QObject *>().metaObject();
-
-template <typename T>
 const QMetaObject *const QSerializer<T>::metaObject =
         QMetaType::fromType<T *>().metaObject();
 
@@ -61,10 +61,9 @@ QVariantMap QSerializer<T>::PToQVariantMap(P from)
                 return ret;
         }
 
-        for (int i = qObjectMetaObject->propertyCount();
-             i < metaObject->propertyCount(); i++) {
+        for (int i = 0; i < metaObject->propertyCount(); i++) {
                 const char *k = metaObject->property(i).name();
-                QVariant v = metaObject->property(i).read(from.data());
+                QVariant v = metaObject->property(i).readOnGadget(from.data());
                 if (v.canConvert<QString>()) {
                         ret.insert(k, v);
                         continue;
@@ -89,8 +88,7 @@ template <typename T>
 QSharedPointer<T> QSerializer<T>::QVariantMapToP(const QVariantMap &map)
 {
         P ret(new T());
-        for (int i = metaObject->propertyOffset();
-             i < metaObject->propertyCount(); i++) {
+        for (int i = 0; i < metaObject->propertyCount(); i++) {
                 QMetaProperty metaProp = metaObject->property(i);
 
                 const char *metaPropName = metaProp.name();
@@ -99,7 +97,7 @@ QSharedPointer<T> QSerializer<T>::QVariantMapToP(const QVariantMap &map)
                         continue;
                 }
 
-                if (!metaProp.write(ret.data(), it.value())) {
+                if (!metaProp.writeOnGadget(ret.data(), it.value())) {
                         Q_ASSERT(false);
                         qWarning().noquote()
                                 << QString("Failed to write \"%1\", maybe missing converter")
@@ -151,6 +149,7 @@ QSerializer<T>::QVariantMapToPStrMap(QVariantMap map)
 }
 
 #define QSERIALIZER_DECLARE(T)                   \
+        Q_DECLARE_METATYPE(QSharedPointer<T>);   \
         namespace QSerializerPrivateNamespace##T \
         {                                        \
                 char init();                     \

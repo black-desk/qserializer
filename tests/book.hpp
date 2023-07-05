@@ -2,7 +2,8 @@
 
 #include <QList>          // for QList
 #include <QMap>           // for QMap
-#include <QObject>        // for Q_PROPERTY, Q_OBJECT
+#include <QMetaType>      // for qRegisterMetaType
+#include <QObject>        // for Q_PROPERTY, Q_GADGET
 #include <QSharedPointer> // for QSharedPointer
 #include <QString>        // for QString
 #include <QStringList>    // for QStringList
@@ -15,7 +16,7 @@ template <class T>
 class QSharedPointer;
 
 class Book : public Base {
-        Q_OBJECT;
+        Q_GADGET;
         Q_PROPERTY(QString title MEMBER m_title);
         Q_PROPERTY(QList<QSharedPointer<Page> > pages MEMBER m_pages);
         Q_PROPERTY(QMap<QString, QSharedPointer<Page> > dict MEMBER m_dict);

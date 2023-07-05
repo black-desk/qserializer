@@ -1,13 +1,15 @@
 #pragma once
 
-#include <QObject>                   // for Q_OBJECT, Q_PROPERTY
+#include <QMetaType>                 // for qRegisterMetaType
+#include <QObject>                   // for Q_GADGET, Q_PROPERTY
+#include <QSharedPointer>            // for QSharedPointer
 #include <QString>                   // for QString
 #include <qserializer/qserializer.h> // for QSERIALIZER_DECLARE
 
 #include "base.hpp" // for Base
 
 class Page : public Base {
-        Q_OBJECT;
+        Q_GADGET;
         Q_PROPERTY(int number MEMBER m_number);
 
     public:
