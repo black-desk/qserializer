@@ -1,11 +1,14 @@
 #pragma once
 
 #include <QDebug>
+#include <QLoggingCategory>
 #include <QMap>
 #include <QMetaObject>
 #include <QMetaProperty>
 #include <QMetaType>
 #include <QSharedPointer>
+
+static inline Q_LOGGING_CATEGORY(qserializer_log, "qserializer");
 
 template <typename T>
 class QSerializer {
@@ -77,7 +80,7 @@ QVariantMap QSerializer<T>::PToQVariantMap(P from)
                         continue;
                 }
                 Q_ASSERT(false);
-                qWarning().noquote()
+                qCCritical(qserializer_log).noquote()
                         << QString("Failed to insert \"%1\", maybe missing converter")
                                    .arg(k);
         }
@@ -97,12 +100,14 @@ QSharedPointer<T> QSerializer<T>::QVariantMapToP(const QVariantMap &map)
                         continue;
                 }
 
-                if (!metaProp.writeOnGadget(ret.data(), it.value())) {
-                        Q_ASSERT(false);
-                        qWarning().noquote()
-                                << QString("Failed to write \"%1\", maybe missing converter")
-                                           .arg(metaPropName);
+                if (metaProp.writeOnGadget(ret.data(), it.value())) {
+                        continue;
                 }
+
+                Q_ASSERT(false);
+                qCCritical(qserializer_log).noquote()
+                        << QString("Failed to write \"%1\", maybe missing converter")
+                                   .arg(metaPropName);
         }
         return ret;
 }

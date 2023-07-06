@@ -4,19 +4,20 @@
 
 #include "qserializer.h"
 
-namespace qserializer
+namespace qserializer_dbus
 {
 
 template <typename T>
 QDBusArgument &move_in(QDBusArgument &args, const T &x)
 {
         QVariant v = QVariant::fromValue<T>(x);
-        if (!v.template canConvert<QVariantMap>()) {
-                Q_ASSERT(false);
-                qCritical() << "Failed to write QDBusArgument as a map";
+        if (v.template canConvert<QVariantMap>()) {
+                args << v.toMap();
+                return args;
         }
-        args << v.toMap();
-        return args;
+        Q_ASSERT(false);
+        qCCritical(qserializer_log)
+                << "Failed to write QDBusArgument as a QVariantMap";
 }
 
 template <typename T>
@@ -25,26 +26,27 @@ const QDBusArgument &move_out(const QDBusArgument &args, T &x)
         QVariantMap map;
         args >> map;
         QVariant v = map;
-        if (!v.canConvert<T>()) {
-                Q_ASSERT(false);
-                qCritical() << "Failed to write QDBusArgument as a map";
+        if (v.template canConvert<T>()) {
+                x = v.value<T>();
+                return args;
         }
-        x = v.value<T>();
-        return args;
+        Q_ASSERT(false);
+        qCCritical(qserializer_log)
+                << "Failed to read QDBusArgument as a QVariantMap";
 }
 
 }
-#define QSERIALIZER_DECLARE_DBUS(T)                                       \
-        [[maybe_unused]] inline const QDBusArgument &operator<<(          \
-                QDBusArgument &args, const QSharedPointer<T> &x)          \
-        {                                                                 \
-                return qserializer::move_in<QSharedPointer<T>>(args, x);  \
-        }                                                                 \
-        [[maybe_unused]] inline const QDBusArgument &operator>>(          \
-                const QDBusArgument &args, QSharedPointer<T> &x)          \
-        {                                                                 \
-                return qserializer::move_out<QSharedPointer<T>>(args, x); \
-        }                                                                 \
+#define QSERIALIZER_DECLARE_DBUS(T)                                            \
+        [[maybe_unused]] inline const QDBusArgument &operator<<(               \
+                QDBusArgument &args, const QSharedPointer<T> &x)               \
+        {                                                                      \
+                return qserializer_dbus::move_in<QSharedPointer<T>>(args, x);  \
+        }                                                                      \
+        [[maybe_unused]] inline const QDBusArgument &operator>>(               \
+                const QDBusArgument &args, QSharedPointer<T> &x)               \
+        {                                                                      \
+                return qserializer_dbus::move_out<QSharedPointer<T>>(args, x); \
+        }                                                                      \
         QSERIALIZER_DECLARE(T)
 
 #define QSERIALIZER_IMPL_DBUS(T, ...)                                      \
