@@ -1,8 +1,7 @@
 #pragma once
 
 #include <QDBusMetaType>
-
-#include "qserializer.h"
+#include <qserializer/qserializer.h>
 
 namespace qserializer_dbus
 {
@@ -38,7 +37,8 @@ const QDBusArgument &move_out(const QDBusArgument &args, T &x)
 }
 
 }
-#define QSERIALIZER_DECLARE_DBUS(T)                                            \
+
+#define QSERIALIZER_DECLARE_DBUS_OPERATORS(T)                                  \
         [[maybe_unused]] inline const QDBusArgument &operator<<(               \
                 QDBusArgument &args, const QSharedPointer<T> &x)               \
         {                                                                      \
@@ -48,9 +48,11 @@ const QDBusArgument &move_out(const QDBusArgument &args, T &x)
                 const QDBusArgument &args, QSharedPointer<T> &x)               \
         {                                                                      \
                 return qserializer_dbus::move_out<QSharedPointer<T>>(args, x); \
-        }                                                                      \
-        QSERIALIZER_DECLARE(T)
+        }
 
+#define QSERIALIZER_DECLARE_DBUS(T) \
+        QSERIALIZER_DECLARE(T);     \
+        QSERIALIZER_DEFINE_DBUS_OPERATORS(T);
 #define QSERIALIZER_IMPL_DBUS(T, ...)                                      \
         QSERIALIZER_IMPL(T, {                                              \
                 qDBusRegisterMetaType<QSharedPointer<T>>();                \

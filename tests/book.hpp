@@ -1,15 +1,15 @@
 #pragma once
 
-#include <QList>          // for QList
-#include <QMap>           // for QMap
-#include <QMetaType>      // for qRegisterMetaType
-#include <QObject>        // for Q_PROPERTY, Q_GADGET
-#include <QSharedPointer> // for QSharedPointer
-#include <QString>        // for QString
-#include <QStringList>    // for QStringList
+#include <QList>                     // for QList
+#include <QMap>                      // for QMap
+#include <QMetaType>                 // for qRegisterMetaType
+#include <QObject>                   // for Q_PROPERTY, Q_GADGET
+#include <QSharedPointer>            // for QSharedPointer
+#include <QString>                   // for QString
+#include <QStringList>               // for QStringList
+#include <qserializer/qserializer.h> // for QSERIALIZER_DECLARE
 
-#include "base.hpp"                  // for Base
-#include "qserializer/qserializer.h" // for QSERIALIZER_DECLARE
+#include "base.hpp" // for Base
 
 class Page;
 template <class T>
