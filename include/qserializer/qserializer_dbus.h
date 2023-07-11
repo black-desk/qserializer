@@ -18,6 +18,7 @@ QDBusArgument &move_in(QDBusArgument &args, const T &x)
         Q_ASSERT(false);
         qCCritical(qserializer_log)
                 << "Failed to write QDBusArgument as a QVariantMap";
+        return args;
 }
 
 template <typename T>
@@ -33,6 +34,7 @@ const QDBusArgument &move_out(const QDBusArgument &args, T &x)
         Q_ASSERT(false);
         qCCritical(qserializer_log)
                 << "Failed to read QDBusArgument as a QVariantMap";
+        return args;
 }
 
 }
