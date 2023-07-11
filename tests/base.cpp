@@ -1,4 +1,4 @@
-#include "base.hpp"
+#include "base.h"
 
 #include "qserializer/qserializer.h" // for QSERIALIZER_IMPL
 

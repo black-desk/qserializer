@@ -1,8 +1,8 @@
 #include "gtest/gtest.h" // for Message, TestPartResult, ASSERT_EQ, Test
 
 #include <iosfwd>      // for ostream
-#include <string>      // for operator<<, string
-#include <type_traits> // for enable_if, is_same
+#include <string>      // for allocator, operator<<, string
+#include <type_traits> // for enable_if, enable_if_t, is_same
 
 #include <QDebug>          // for operator<<, QDebug
 #include <QJsonDocument>   // for QJsonDocument
@@ -16,8 +16,8 @@
 #include <QStringList>     // for QStringList
 #include <QVariant>        // for QVariant
 
-#include "book.hpp" // for Book
-#include "page.hpp" // for Page
+#include "book.h" // for Book
+#include "page.h" // for Page
 
 template <class T>
 class QSharedPointer;

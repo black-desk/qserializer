@@ -1,6 +1,16 @@
-#include "book.hpp"
+#include "book.h"
 
-#include "custom_converter.hpp"      // for registerQListQStringConveter
-#include "qserializer/qserializer.h" // for QSERIALIZER_IMPL
+#include <qserializer/qserializer.h> // for QSERIALIZER_IMPL
 
-QSERIALIZER_IMPL(Book, { registerQListQStringConveter(); });
+#if QT_VERSION <= QT_VERSION_CHECK(6, 2, 0)
+#include "custom_converter.h" // for registerQListQStringConveter
+#endif
+
+QSERIALIZER_IMPL(Book
+
+#if QT_VERSION <= QT_VERSION_CHECK(6, 2, 0)
+                 ,
+                 { registerQListQStringConveter(); }
+#endif
+
+);

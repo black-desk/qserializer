@@ -1,1 +1,1 @@
-add_subdirectory(dbus)
+add_subdirectory (dbus_message)

@@ -1,4 +1,4 @@
-#include "custom_converter.hpp"
+#include "custom_converter.h"
 
 #include <QList>        // for QList
 #include <QMetaType>    // for QMetaType
@@ -9,6 +9,7 @@
 
 void registerQListQStringConveter()
 {
+#if QT_VERSION <= QT_VERSION_CHECK(6, 2, 0)
         static int _ = []() -> int {
                 QMetaType::registerConverter<QList<QString>, QVariantList>(
                         [](const QList<QString> &from) -> QVariantList {
@@ -20,4 +21,5 @@ void registerQListQStringConveter()
                         });
                 return _;
         }();
+#endif
 }

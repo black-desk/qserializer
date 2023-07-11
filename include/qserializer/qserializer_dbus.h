@@ -52,7 +52,7 @@ const QDBusArgument &move_out(const QDBusArgument &args, T &x)
 
 #define QSERIALIZER_DECLARE_DBUS(T) \
         QSERIALIZER_DECLARE(T);     \
-        QSERIALIZER_DEFINE_DBUS_OPERATORS(T);
+        QSERIALIZER_DECLARE_DBUS_OPERATORS(T);
 #define QSERIALIZER_IMPL_DBUS(T, ...)                                      \
         QSERIALIZER_IMPL(T, {                                              \
                 qDBusRegisterMetaType<QSharedPointer<T>>();                \

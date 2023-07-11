@@ -9,11 +9,11 @@
 #include <QStringList>               // for QStringList
 #include <qserializer/qserializer.h> // for QSERIALIZER_DECLARE
 
-#include "base.hpp" // for Base
+#include "base.h"           // for Base
+#include "page.h"           // for Page
+#include "qsharedpointer.h" // for operator==
 
 class Page;
-template <class T>
-class QSharedPointer;
 
 class Book : public Base {
         Q_GADGET;
@@ -29,7 +29,7 @@ class Book : public Base {
         QList<QSharedPointer<Page> > m_pages;
         QMap<QString, QSharedPointer<Page> > m_dict;
         QStringList m_list1;
-        // NOTE: Qt cannot convert QList<QString> to QVariantList by default.
+        // NOTE: Qt5 cannot convert QList<QString> to QVariantList by default.
         // You need a custom converter registered to make QSerializer work,
         // check book.cpp for details.
         QList<QString> m_list2;

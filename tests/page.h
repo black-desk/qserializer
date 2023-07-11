@@ -6,7 +6,7 @@
 #include <QString>                   // for QString
 #include <qserializer/qserializer.h> // for QSERIALIZER_DECLARE
 
-#include "base.hpp" // for Base
+#include "base.h" // for Base
 
 class Page : public Base {
         Q_GADGET;

@@ -1,41 +1,62 @@
-cmake_minimum_required(VERSION 3.13.4)
-
-project(qserializer LANGUAGES CXX)
-
-# for private headers
-include_directories(${CMAKE_SOURCE_DIR}/src)
-# for generate private headers
-include_directories(${CMAKE_BINARY_DIR}/src)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
-
-find_package(Qt5 REQUIRED COMPONENTS Core DBus)
-
-add_library(qserializer INTERFACE)
-target_sources(
-  qserializer
-  INTERFACE include/qserializer/qserializer.h include/qserializer/qserializer_dbus.h
-)
-target_link_libraries(
-  qserializer
-  INTERFACE Qt5::Core Qt5::DBus
-)
-target_include_directories(
-  qserializer
-  INTERFACE ./include
+cmake_minimum_required (
+        VERSION
+                3.13.4
 )
 
-add_subdirectory(examples)
+project (
+        qserializer
+        LANGUAGES
+                CXX
+)
 
-include(CTest)
-if(BUILD_TESTING)
-  include(GoogleTest)
-  enable_testing()
-  find_package(GTest REQUIRED)
-  add_subdirectory(tests)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set (CMAKE_AUTOMOC ON)
+set (CMAKE_AUTORCC ON)
+set (CMAKE_AUTOUIC ON)
+
+set (
+        QT_VERSION_MAJOR
+        "6"
+        CACHE
+                STRING "The qt major version tests and examples link to."
+)
+
+find_package (
+        Qt${QT_VERSION_MAJOR}
+        COMPONENTS
+                Core DBus
+        REQUIRED
+)
+
+add_library (qserializer INTERFACE)
+add_library (qserializer::qserializer ALIAS qserializer)
+
+target_sources (
+        qserializer
+        INTERFACE
+                include/qserializer/qserializer.h
+                include/qserializer/qserializer_dbus.h
+)
+
+target_link_libraries (
+        qserializer
+        INTERFACE
+                Qt::Core Qt::DBus
+)
+
+target_include_directories (
+        qserializer
+        INTERFACE
+                ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+if(PROJECT_IS_TOP_LEVEL)
+        add_subdirectory (examples)
+
+        include (CTest)
+        include (GoogleTest)
+        enable_testing ()
+        find_package (GTest REQUIRED)
+        add_subdirectory (tests)
 endif()
