@@ -1,18 +1,31 @@
 # QSerializer
 
-A simple file header-only qt helper library for serializing/deserializing
-QSharedPointer\<QObject\> into/from QVariantMap.
+A simple header-only qt helper library for serializing/deserializing
+QSharedPointer\<class with Q_GADGET\> into/from QVariantMap.
 
-It have to be QSharedPointer of the QObject but not QObject. That's because
-QObject has its copy constructor deleted. And I want to use the Qt meta type
-system for meta programming. So I have to use some kind of pointer of QObject.
-But QScopePointer cannot be moved. In the end I choose QScopePointer.
+It have to be a QSharedPointer of a class with  Q_GADGET
+but not a QObject or a pointer to a QObject.
+That's because this library rely on writeOnGadget,
+witch will not work on QObject.
 
-Also support serializing/deserializing QList\<QSharedPointer\<QObject\>\> and
-QMap\<QString, QSharedPointer\<QObject\>\> into/from QVariantList and
-QVariantMap.
+Also support serializing/deserializing
 
-As QVariantMap and QVariantList can easily be converted to/from Qt JSON types
-and QDBusArgument, this library should be good enough for common usage.
+- QList\<QSharedPointer\<class with Q_GADGET\>\>
+- QMap\<QString, QSharedPointer\<class with Q_GADGET\>\>
 
-Check tests for coding examples.
+into/from
+
+- QVariantList
+- QVariantMap
+
+As QVariantMap and QVariantList can easily
+be converted to/from Qt JSON types and QDBusArgument,
+this library should be good enough for common usage.
+
+Check [tests](tests/tests.cpp) for coding examples.
+
+---
+
+[`qserializer_dbus.h`](include/qserializer/qserializer_dbus.h)
+can working with QDBusArgument,
+check [the example](examples/dbus_message) for details of that.
