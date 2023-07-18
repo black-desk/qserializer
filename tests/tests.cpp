@@ -16,8 +16,8 @@
 #include <QStringList>     // for QStringList
 #include <QVariant>        // for QVariant
 
-#include "book.h" // for Book
-#include "page.h" // for Page
+#include "Book.h" // for Book
+#include "Page.h" // for Page
 
 template <class T>
 class QSharedPointer;

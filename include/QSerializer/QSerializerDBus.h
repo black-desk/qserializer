@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QDBusMetaType>
-#include <qserializer/qserializer.h>
+#include <QSerializer/QSerializer.h>
 
 namespace qserializer_dbus
 {

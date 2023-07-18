@@ -2,10 +2,10 @@
 
 #include <QMetaType>                 // for qRegisterMetaType
 #include <QObject>                   // for Q_GADGET, Q_PROPERTY
+#include <QSerializer/QSerializer.h> // for QSERIALIZER_DECLARE
 #include <QSharedPointer>            // for QSharedPointer
-#include <qserializer/qserializer.h> // for QSERIALIZER_DECLARE
 
-#include "base.h" // for Base
+#include "Base.h" // for Base
 
 class Page : public Base {
         Q_GADGET;

@@ -18,7 +18,7 @@ target_include_directories (
 target_link_libraries (
         TestDBusServerApaptor
         PUBLIC
-                qserializer::qserializer Qt::Core Qt::DBus
+                QSerializerDBus
 )
 
 set_source_files_properties (
@@ -48,5 +48,5 @@ target_include_directories (
 target_link_libraries (
         TestDBusServerInterface
         PUBLIC
-                qserializer::qserializer Qt::Core Qt::DBus
+                QSerializerDBus
 )

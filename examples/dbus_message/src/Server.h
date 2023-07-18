@@ -9,6 +9,7 @@
 class Response;
 template <class T>
 class QSharedPointer;
+class QString;
 
 class Server : public QObject {
         Q_OBJECT;

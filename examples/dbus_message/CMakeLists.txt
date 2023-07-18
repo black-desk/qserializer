@@ -15,8 +15,7 @@ target_include_directories (
 target_link_libraries (
         server
         PRIVATE
-                qserializer::qserializer Qt::Core Qt::DBus
-                TestDBusServerApaptor
+                QSerializer::DBus TestDBusServerApaptor
 )
 
 add_executable (client)
@@ -33,6 +32,5 @@ target_include_directories (
 target_link_libraries (
         client
         PRIVATE
-                qserializer::qserializer Qt::Core Qt::DBus
-                TestDBusServerInterface
+                QSerializer::DBus TestDBusServerInterface
 )

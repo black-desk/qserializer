@@ -17,47 +17,136 @@ set (CMAKE_AUTORCC ON)
 set (CMAKE_AUTOUIC ON)
 
 set (
-        QT_VERSION_MAJOR
+        QSERIALIZER_QT_VERSION_MAJOR
         "6"
         CACHE
                 STRING "The qt major version tests and examples link to."
 )
 
 find_package (
-        Qt${QT_VERSION_MAJOR}
+        Qt${QSERIALIZER_QT_VERSION_MAJOR}
         COMPONENTS
                 Core DBus
         REQUIRED
 )
 
-add_library (qserializer INTERFACE)
-add_library (qserializer::qserializer ALIAS qserializer)
+add_library (QSerializerCore INTERFACE)
+add_library (QSerializer::Core ALIAS QSerializerCore)
 
+# cmake-format: off
 target_sources (
-        qserializer
-        INTERFACE
-                include/qserializer/qserializer.h
-                include/qserializer/qserializer_dbus.h
+        QSerializerCore
+        PUBLIC
+                FILE_SET HEADERS
+                BASE_DIRS include
+                FILES
+                        include/QSerializer/QSerializer.h
 )
+# cmake-format: on
 
 target_link_libraries (
-        qserializer
+        QSerializerCore
         INTERFACE
-                Qt::Core Qt::DBus
+                Qt::Core
 )
 
-target_include_directories (
-        qserializer
+add_library (QSerializerDBus INTERFACE)
+add_library (QSerializer::DBus ALIAS QSerializerDBus)
+
+# cmake-format: off
+target_sources (
+        QSerializerDBus
+        PUBLIC
+                FILE_SET HEADERS
+                BASE_DIRS include
+                FILES
+                        include/QSerializer/QSerializerDBus.h
+)
+# cmake-format: on
+
+target_link_libraries (
+        QSerializerDBus
         INTERFACE
-                ${CMAKE_CURRENT_SOURCE_DIR}/include
+                QSerializer::Core Qt::DBus
 )
 
-if(PROJECT_IS_TOP_LEVEL)
-        add_subdirectory (examples)
+# Install
 
+include (GNUInstallDirs)
+
+# cmake-format: off
+install (
+        TARGETS QSerializerCore
+        EXPORT QSerializerCore
+        FILE_SET HEADERS
+)
+
+install (
+        EXPORT QSerializerCore
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QSerializer
+        FILE QSerializerCore.cmake
+        NAMESPACE QSerializer::
+        COMPONENT Core
+)
+
+install (
+        TARGETS QSerializerDBus
+        EXPORT QSerializerDBus
+        FILE_SET HEADERS
+)
+
+install (
+        EXPORT QSerializerDBus
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QSerializer
+        FILE QSerializerDBus.cmake
+        NAMESPACE QSerializer::
+        COMPONENT DBus
+)
+# cmake-format: on
+
+include (CMakePackageConfigHelpers)
+set (cmakeModulesDir cmake)
+
+# cmake-format: off
+configure_package_config_file(
+        misc/cmake/QSerializerConfig.cmake.in
+        misc/cmake/QSerializerConfig.cmake
+        INSTALL_DESTINATION
+                ${CMAKE_INSTALL_LIBDIR}/cmake/QSerializer
+        PATH_VARS
+                cmakeModulesDir
+        NO_SET_AND_CHECK_MACRO
+        NO_CHECK_REQUIRED_COMPONENTS_MACRO
+)
+# cmake-format: on
+
+# cmake-format: off
+install (
+        FILES
+                ${CMAKE_CURRENT_BINARY_DIR}/misc/cmake/QSerializerConfig.cmake
+        DESTINATION
+                ${CMAKE_INSTALL_LIBDIR}/cmake/QSerializer
+)
+# cmake-format: on
+
+if(NOT PROJECT_IS_TOP_LEVEL)
+        return ()
+endif()
+
+# Build tests
+
+option (
+        QSERIALIZER_ENABLE_TESTING "QSerializer: build tests."
+        ${PROJECT_IS_TOP_LEVEL}
+)
+if(QSERIALIZER_ENABLE_TESTING)
         include (CTest)
         include (GoogleTest)
         enable_testing ()
         find_package (GTest REQUIRED)
         add_subdirectory (tests)
 endif()
+
+# Build examples
+
+add_subdirectory (examples)

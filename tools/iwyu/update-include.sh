@@ -13,7 +13,6 @@ IWYU_TOOL=${IWYU_TOOL:="iwyu-tool"}
 IWYU_FIX_INCLUDES=${IWYU_FIX_INCLUDES:="iwyu-fix-includes"}
 
 "$IWYU_FIX_INCLUDES" --ignore_re 'build/*' \
-	--nosafe_headers \
 	--update_comments \
 	<build/iwyu.out
 

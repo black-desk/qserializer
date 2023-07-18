@@ -1,10 +1,10 @@
 #pragma once
 
-#include <QMetaType>                      // for qRegisterMetaType
-#include <QObject>                        // for Q_PROPERTY, Q_GADGET
-#include <QSharedPointer>                 // for QSharedPointer
-#include <QString>                        // for QString
-#include <qserializer/qserializer_dbus.h> // for move_in, move_out, QSERIAL...
+#include <QMetaType>                     // for qRegisterMetaType
+#include <QObject>                       // for Q_PROPERTY, Q_GADGET
+#include <QSerializer/QSerializerDBus.h> // for move_in, move_out, QSERIALI...
+#include <QSharedPointer>                // for QSharedPointer
+#include <QString>                       // for QString
 
 class Response {
         Q_GADGET;

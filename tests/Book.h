@@ -4,13 +4,13 @@
 #include <QMap>                      // for QMap
 #include <QMetaType>                 // for qRegisterMetaType
 #include <QObject>                   // for Q_PROPERTY, Q_GADGET
+#include <QSerializer/QSerializer.h> // for QSERIALIZER_DECLARE
 #include <QSharedPointer>            // for QSharedPointer
 #include <QString>                   // for QString
 #include <QStringList>               // for QStringList
-#include <qserializer/qserializer.h> // for QSERIALIZER_DECLARE
 
-#include "base.h" // for Base
-#include "page.h" // for Page
+#include "Base.h" // for Base
+#include "Page.h" // for Page
 
 class Page;
 template <class T>

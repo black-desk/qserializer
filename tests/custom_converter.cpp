@@ -2,10 +2,11 @@
 
 #include <QList>        // for QList
 #include <QMetaType>    // for QMetaType
-#include <QString>      // for QString
+#include <QString>      // for QString, QTypeInfo<>::isLarge, QTypeInfo<>::...
 #include <QStringList>  // for QStringList
 #include <QVariant>     // for QVariant
 #include <QVariantList> // for QVariantList
+#include <QtGlobal>     // for QT_VERSION, QT_VERSION_CHECK
 
 void registerQListQStringConveter()
 {
