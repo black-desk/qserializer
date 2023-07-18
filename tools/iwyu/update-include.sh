@@ -12,7 +12,10 @@ IWYU_TOOL=${IWYU_TOOL:="iwyu-tool"}
 
 IWYU_FIX_INCLUDES=${IWYU_FIX_INCLUDES:="iwyu-fix-includes"}
 
-"$IWYU_FIX_INCLUDES" --update_comments --ignore_re 'build/*' <build/iwyu.out
+"$IWYU_FIX_INCLUDES" --ignore_re 'build/*' \
+	--nosafe_headers \
+	--update_comments \
+	<build/iwyu.out
 
 CLANG_FORMAT=${CLANG_FORMAT:="clang-format"}
 
