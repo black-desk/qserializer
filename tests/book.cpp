@@ -1,5 +1,6 @@
 #include "book.h"
 
+#include <QtGlobal>                  // for QT_VERSION, QT_VERSION_CHECK
 #include <qserializer/qserializer.h> // for QSERIALIZER_IMPL
 
 #if QT_VERSION <= QT_VERSION_CHECK(6, 2, 0)

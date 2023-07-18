@@ -9,11 +9,12 @@
 #include <QStringList>               // for QStringList
 #include <qserializer/qserializer.h> // for QSERIALIZER_DECLARE
 
-#include "base.h"           // for Base
-#include "page.h"           // for Page
-#include "qsharedpointer.h" // for operator==
+#include "base.h" // for Base
+#include "page.h" // for Page
 
 class Page;
+template <class T>
+class QSharedPointer;
 
 class Book : public Base {
         Q_GADGET;

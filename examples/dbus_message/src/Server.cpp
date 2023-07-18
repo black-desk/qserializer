@@ -1,7 +1,5 @@
 #include "Server.h"
 
-#include <initializer_list> // for initializer_list
-
 #include <QSharedPointer> // for QSharedPointer
 #include <QString>        // for QString
 

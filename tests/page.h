@@ -3,7 +3,6 @@
 #include <QMetaType>                 // for qRegisterMetaType
 #include <QObject>                   // for Q_GADGET, Q_PROPERTY
 #include <QSharedPointer>            // for QSharedPointer
-#include <QString>                   // for QString
 #include <qserializer/qserializer.h> // for QSERIALIZER_DECLARE
 
 #include "base.h" // for Base

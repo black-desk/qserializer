@@ -6,7 +6,6 @@
 
 #include "Response.h" // for Response
 
-class QString;
 class Response;
 template <class T>
 class QSharedPointer;
