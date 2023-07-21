@@ -26,6 +26,6 @@ Check [tests](tests/tests.cpp) for coding examples.
 
 ---
 
-[`qserializer_dbus.h`](include/qserializer/qserializer_dbus.h)
+[`QSerializerDBus.h`](include/QSerializer/QSerializerDBus.h)
 can working with QDBusArgument,
 check [the example](examples/dbus_message) for details of that.
