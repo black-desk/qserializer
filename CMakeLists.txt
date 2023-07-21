@@ -9,19 +9,34 @@ project (
                 CXX
 )
 
+# cmake-format: off
+set (
+        QSERIALIZER_QT_VERSION_MAJOR "6"
+        CACHE STRING "The qt major version tests and examples link to."
+)
+
+set (
+        QSERIALIZER_ENABLE_TESTING ${PROJECT_IS_TOP_LEVEL}
+        CACHE BOOL "Build tests."
+)
+
+set (
+        QSERIALIZER_ENABLE_EXAMPLES ${PROJECT_IS_TOP_LEVEL}
+        CACHE BOOL "Build examples."
+)
+
+set (
+        QSERIALIZER_ENABLE_INSTALL ${PROJECT_IS_TOP_LEVEL}
+        CACHE BOOL "Enable the install target."
+)
+# cmake-format: on
+
 set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set (CMAKE_AUTOMOC ON)
 set (CMAKE_AUTORCC ON)
 set (CMAKE_AUTOUIC ON)
-
-set (
-        QSERIALIZER_QT_VERSION_MAJOR
-        "6"
-        CACHE
-                STRING "The qt major version tests and examples link to."
-)
 
 find_package (
         Qt${QSERIALIZER_QT_VERSION_MAJOR}
@@ -70,7 +85,25 @@ target_link_libraries (
                 QSerializer::Core Qt::DBus
 )
 
+if(QSERIALIZER_ENABLE_TESTING)
+        # Build tests
+        include (CTest)
+        include (GoogleTest)
+        enable_testing ()
+        find_package (GTest REQUIRED)
+        add_subdirectory (tests)
+endif()
+
+if(QSERIALIZER_ENABLE_EXAMPLES)
+        # Build examples
+        add_subdirectory (examples)
+endif()
+
 # Install
+
+if(NOT QSERIALIZER_ENABLE_INSTALL)
+        return ()
+endif()
 
 include (GNUInstallDirs)
 
@@ -128,25 +161,3 @@ install (
                 ${CMAKE_INSTALL_LIBDIR}/cmake/QSerializer
 )
 # cmake-format: on
-
-if(NOT PROJECT_IS_TOP_LEVEL)
-        return ()
-endif()
-
-# Build tests
-
-option (
-        QSERIALIZER_ENABLE_TESTING "QSerializer: build tests."
-        ${PROJECT_IS_TOP_LEVEL}
-)
-if(QSERIALIZER_ENABLE_TESTING)
-        include (CTest)
-        include (GoogleTest)
-        enable_testing ()
-        find_package (GTest REQUIRED)
-        add_subdirectory (tests)
-endif()
-
-# Build examples
-
-add_subdirectory (examples)
