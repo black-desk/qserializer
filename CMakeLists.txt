@@ -31,6 +31,8 @@ set (
 )
 # cmake-format: on
 
+message ("QSerializer build with QT${QSERIALIZER_QT_VERSION_MAJOR}")
+
 set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
