@@ -33,9 +33,6 @@ set (
 
 message ("QSerializer build with QT${QSERIALIZER_QT_VERSION_MAJOR}")
 
-set (CMAKE_CXX_STANDARD 17)
-set (CMAKE_CXX_STANDARD_REQUIRED ON)
-
 set (CMAKE_AUTOMOC ON)
 set (CMAKE_AUTORCC ON)
 set (CMAKE_AUTOUIC ON)
@@ -51,6 +48,7 @@ add_library (QSerializerCore INTERFACE)
 add_library (QSerializer::Core ALIAS QSerializerCore)
 
 # cmake-format: off
+target_compile_features (QSerializerCore INTERFACE cxx_std_17)
 target_sources (
         QSerializerCore
         PUBLIC
@@ -71,6 +69,7 @@ add_library (QSerializerDBus INTERFACE)
 add_library (QSerializer::DBus ALIAS QSerializerDBus)
 
 # cmake-format: off
+target_compile_features (QSerializerDBus INTERFACE cxx_std_17)
 target_sources (
         QSerializerDBus
         PUBLIC
