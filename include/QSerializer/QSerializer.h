@@ -79,7 +79,6 @@ QVariantMap QSerializer<T>::PToQVariantMap(P from)
                         ret.insert(k, v.value<QVariantMap>());
                         continue;
                 }
-                Q_ASSERT(false);
                 qCCritical(qserializer_log).noquote()
                         << QString("Failed to insert \"%1\", maybe missing converter")
                                    .arg(k);
@@ -104,7 +103,6 @@ QSharedPointer<T> QSerializer<T>::QVariantMapToP(const QVariantMap &map)
                         continue;
                 }
 
-                Q_ASSERT(false);
                 qCCritical(qserializer_log).noquote()
                         << QString("Failed to write \"%1\", maybe missing converter")
                                    .arg(metaPropName);

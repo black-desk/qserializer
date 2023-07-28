@@ -14,7 +14,6 @@ QDBusArgument &move_in(QDBusArgument &args, const T &x)
                 args << v.toMap();
                 return args;
         }
-        Q_ASSERT(false);
         qCCritical(qserializer_log)
                 << "Failed to write QDBusArgument as a QVariantMap";
         return args;
@@ -30,7 +29,6 @@ const QDBusArgument &move_out(const QDBusArgument &args, T &x)
                 x = v.value<T>();
                 return args;
         }
-        Q_ASSERT(false);
         qCCritical(qserializer_log)
                 << "Failed to read QDBusArgument as a QVariantMap";
         return args;
