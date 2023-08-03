@@ -44,7 +44,7 @@ find_package (
         REQUIRED
 )
 
-add_library (QSerializerCore INTERFACE)
+add_library (QSerializerCore src/QSerializer/QSerializer.cpp)
 add_library (QSerializer::Core ALIAS QSerializerCore)
 
 # cmake-format: off
@@ -52,7 +52,8 @@ target_compile_features (QSerializerCore INTERFACE cxx_std_17)
 target_sources (
         QSerializerCore
         PUBLIC
-                FILE_SET HEADERS
+                FILE_SET public_headers
+                TYPE HEADERS
                 BASE_DIRS include
                 FILES
                         include/QSerializer/QSerializer.h
@@ -61,11 +62,11 @@ target_sources (
 
 target_link_libraries (
         QSerializerCore
-        INTERFACE
+        PUBLIC
                 Qt::Core
 )
 
-add_library (QSerializerDBus INTERFACE)
+add_library (QSerializerDBus src/QSerializer/QSerializerDBus.cpp)
 add_library (QSerializer::DBus ALIAS QSerializerDBus)
 
 # cmake-format: off
@@ -73,7 +74,8 @@ target_compile_features (QSerializerDBus INTERFACE cxx_std_17)
 target_sources (
         QSerializerDBus
         PUBLIC
-                FILE_SET HEADERS
+                FILE_SET public_headers
+                TYPE HEADERS
                 BASE_DIRS include
                 FILES
                         include/QSerializer/QSerializerDBus.h
@@ -82,7 +84,7 @@ target_sources (
 
 target_link_libraries (
         QSerializerDBus
-        INTERFACE
+        PUBLIC
                 QSerializer::Core Qt::DBus
 )
 
@@ -112,7 +114,7 @@ include (GNUInstallDirs)
 install (
         TARGETS QSerializerCore
         EXPORT QSerializerCore
-        FILE_SET HEADERS
+        FILE_SET public_headers
 )
 
 install (
@@ -126,7 +128,7 @@ install (
 install (
         TARGETS QSerializerDBus
         EXPORT QSerializerDBus
-        FILE_SET HEADERS
+        FILE_SET public_headers
 )
 
 install (
