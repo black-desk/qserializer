@@ -1,12 +1,23 @@
 #pragma once
 
-#include <QDebug>
-#include <QLoggingCategory>
-#include <QMap>
-#include <QMetaObject>
-#include <QMetaProperty>
-#include <QMetaType>
-#include <QSharedPointer>
+#include <type_traits> // for is_base_of, is_pointer
+
+#include <QDebug>           // for QDebug
+#include <QList>            // for QList
+#include <QLoggingCategory> // for qCCritical, Q_LOGGING_CATEGORY
+#include <QMap>             // for QMap, operator!=, operator==
+#include <QMessageLogger>   // for QMessageLogger
+#include <QMetaObject>      // for QMetaObject
+#include <QMetaProperty>    // for QMetaProperty
+#include <QMetaType>        // for QMetaType
+#include <QString>          // for QString
+#include <QVariant>         // for QVariant
+#include <QVariantList>     // for QVariantList
+#include <QVariantMap>      // for QVariantMap
+
+class QObject;
+template <class T>
+class QSharedPointer;
 
 static inline Q_LOGGING_CATEGORY(qserializer_log, "qserializer");
 
