@@ -22,10 +22,11 @@ As QVariantMap and QVariantList can easily
 be converted to/from Qt JSON types and QDBusArgument,
 this library should be good enough for common usage.
 
-Check [tests](tests/tests.cpp) for coding examples.
+Check [types](./tests/src/qserializer/tests/types)
+defined for basic tests for coding examples.
 
 ---
 
-[`QSerializerDBus.h`](include/QSerializer/QSerializerDBus.h)
+[`QSerializer::DBus`](./libs/dbus/include/qserializer/dbus.h)
 can working with QDBusArgument,
 check [the example](examples/dbus_message) for details of that.

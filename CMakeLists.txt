@@ -1,6 +1,6 @@
 cmake_minimum_required (
         VERSION
-                3.13.4
+                3.23
 )
 
 project (
@@ -8,13 +8,35 @@ project (
         LANGUAGES
                 CXX
 )
-
 # cmake-format: off
 set (
-        QSERIALIZER_QT_VERSION_MAJOR "6"
+        QT_VERSION_MAJOR "6"
         CACHE STRING "The qt major version tests and examples link to."
 )
+# cmake-format: on
 
+set (CMAKE_AUTOMOC ON)
+set (CMAKE_AUTORCC ON)
+set (CMAKE_AUTOUIC ON)
+
+find_package (
+        Qt${QT_VERSION_MAJOR}
+        COMPONENTS
+                Core
+        REQUIRED
+)
+
+find_package (
+        Qt${QT_VERSION_MAJOR}
+        COMPONENTS
+                DBus
+)
+
+if(TARGET Qt::DBus)
+        set (QT_DBUS_FOUND ON)
+endif()
+
+# cmake-format: off
 set (
         QSERIALIZER_ENABLE_TESTING ${PROJECT_IS_TOP_LEVEL}
         CACHE BOOL "Build tests."
@@ -29,64 +51,17 @@ set (
         QSERIALIZER_ENABLE_INSTALL ${PROJECT_IS_TOP_LEVEL}
         CACHE BOOL "Enable the install target."
 )
+
+set (
+        QSERIALIZER_ENABLE_DBUS ${QT_DBUS_FOUND}
+        CACHE BOOL "Enable DBus support."
+)
+
+message ( STATUS "QSerializer build with QT${QT_VERSION_MAJOR}" )
+
 # cmake-format: on
 
-message ("QSerializer build with QT${QSERIALIZER_QT_VERSION_MAJOR}")
-
-set (CMAKE_AUTOMOC ON)
-set (CMAKE_AUTORCC ON)
-set (CMAKE_AUTOUIC ON)
-
-find_package (
-        Qt${QSERIALIZER_QT_VERSION_MAJOR}
-        COMPONENTS
-                Core DBus
-        REQUIRED
-)
-
-add_library (QSerializerCore src/QSerializer/QSerializer.cpp)
-add_library (QSerializer::Core ALIAS QSerializerCore)
-
-# cmake-format: off
-target_compile_features (QSerializerCore INTERFACE cxx_std_17)
-target_sources (
-        QSerializerCore
-        PUBLIC
-                FILE_SET public_headers
-                TYPE HEADERS
-                BASE_DIRS include
-                FILES
-                        include/QSerializer/QSerializer.h
-)
-# cmake-format: on
-
-target_link_libraries (
-        QSerializerCore
-        PUBLIC
-                Qt::Core
-)
-
-add_library (QSerializerDBus src/QSerializer/QSerializerDBus.cpp)
-add_library (QSerializer::DBus ALIAS QSerializerDBus)
-
-# cmake-format: off
-target_compile_features (QSerializerDBus INTERFACE cxx_std_17)
-target_sources (
-        QSerializerDBus
-        PUBLIC
-                FILE_SET public_headers
-                TYPE HEADERS
-                BASE_DIRS include
-                FILES
-                        include/QSerializer/QSerializerDBus.h
-)
-# cmake-format: on
-
-target_link_libraries (
-        QSerializerDBus
-        PUBLIC
-                QSerializer::Core Qt::DBus
-)
+add_subdirectory (libs)
 
 if(QSERIALIZER_ENABLE_TESTING)
         # Build tests
@@ -108,39 +83,8 @@ if(NOT QSERIALIZER_ENABLE_INSTALL)
         return ()
 endif()
 
-include (GNUInstallDirs)
-
-# cmake-format: off
-install (
-        TARGETS QSerializerCore
-        EXPORT QSerializerCore
-        FILE_SET public_headers
-)
-
-install (
-        EXPORT QSerializerCore
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QSerializer
-        FILE QSerializerCore.cmake
-        NAMESPACE QSerializer::
-        COMPONENT Core
-)
-
-install (
-        TARGETS QSerializerDBus
-        EXPORT QSerializerDBus
-        FILE_SET public_headers
-)
-
-install (
-        EXPORT QSerializerDBus
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QSerializer
-        FILE QSerializerDBus.cmake
-        NAMESPACE QSerializer::
-        COMPONENT DBus
-)
-# cmake-format: on
-
 include (CMakePackageConfigHelpers)
+# This will be used to replace @PACKAGE_cmakeModulesDir@
 set (cmakeModulesDir cmake)
 
 # cmake-format: off
