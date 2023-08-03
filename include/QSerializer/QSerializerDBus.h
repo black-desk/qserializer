@@ -1,7 +1,13 @@
 #pragma once
 
+#include <QDBusArgument> // for QDBusArgument, operator<<, oper...
 #include <QDBusMetaType>
-#include <QSerializer/QSerializer.h>
+#include <QLoggingCategory>          // for qCCritical
+#include <QMap>                      // for QMap
+#include <QMessageLogger>            // for QMessageLogger
+#include <QSerializer/QSerializer.h> // for qserializer_log, QSERIALIZER_DE...
+#include <QVariant>                  // for QVariant
+#include <QVariantMap>               // for QVariantMap
 
 namespace qserializer_dbus
 {
