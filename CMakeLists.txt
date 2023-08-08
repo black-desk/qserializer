@@ -9,6 +9,10 @@ project (
                 CXX
 )
 
+include (${PROJECT_SOURCE_DIR}/misc/cmake/GetSemverFromGit.cmake)
+
+qserializer_get_semver_from_git (QSERIALIZER_SEMVER)
+
 set (CMAKE_AUTOMOC ON)
 set (CMAKE_AUTORCC ON)
 set (CMAKE_AUTOUIC ON)

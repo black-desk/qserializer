@@ -1,3 +1,8 @@
+configure_file (
+        ${PROJECT_SOURCE_DIR}/libs/core/include/qserializer/config.h.in
+        ${PROJECT_BINARY_DIR}/libs/core/include/qserializer/config.h @ONLY
+)
+
 add_library (
         qserializer_core OBJECT
         ${PROJECT_SOURCE_DIR}/libs/core/src/qserializer/core.cpp
@@ -12,8 +17,10 @@ target_sources (
         qserializer_core
         PUBLIC
                 FILE_SET public_headers TYPE HEADERS BASE_DIRS
-                ${PROJECT_SOURCE_DIR}/libs/core/include FILES
+                ${PROJECT_SOURCE_DIR}/libs/core/include
+                ${PROJECT_BINARY_DIR}/libs/core/include FILES
                 ${PROJECT_SOURCE_DIR}/libs/core/include/qserializer/core.h
+                ${PROJECT_BINARY_DIR}/libs/core/include/qserializer/config.h
                 ${PROJECT_SOURCE_DIR}/libs/core/include/qserializer/detail/QSerializer.h
 )
 
