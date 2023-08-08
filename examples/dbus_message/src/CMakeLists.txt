@@ -1,13 +1,14 @@
 add_library (
         qserializer_examples_dbusmessage
-        qserializer/examples/dbus_message/Response.cpp
+        ${PROJECT_SOURCE_DIR}/src/qserializer/examples/dbus_message/Response.cpp
 )
 
 target_sources (
         qserializer_examples_dbusmessage
         PUBLIC
-                FILE_SET public_headers TYPE HEADERS BASE_DIRS ../include FILES
-                ../include/qserializer/examples/dbus_message/Response.h
+                FILE_SET public_headers TYPE HEADERS BASE_DIRS
+                ${PROJECT_SOURCE_DIR}/include FILES
+                ${PROJECT_SOURCE_DIR}/include/qserializer/examples/dbus_message/Response.h
 )
 
 target_link_libraries (
