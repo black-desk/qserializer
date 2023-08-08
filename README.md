@@ -1,17 +1,17 @@
 # QSerializer
 
 A simple header-only qt helper library for serializing/deserializing
-QSharedPointer\<class with Q_GADGET\> into/from QVariantMap.
+QSharedPointer\<class with `Q_GADGET`\> into/from QVariantMap.
 
-It have to be a QSharedPointer of a class with  Q_GADGET
+It have to be a QSharedPointer of a class with `Q_GADGET`
 but not a QObject or a pointer to a QObject.
-That's because this library rely on writeOnGadget,
+That's because this library rely on `writeOnGadget`,
 witch will not work on QObject.
 
 Also support serializing/deserializing
 
-- QList\<QSharedPointer\<class with Q_GADGET\>\>
-- QMap\<QString, QSharedPointer\<class with Q_GADGET\>\>
+- QList\<QSharedPointer\<class with `Q_GADGET`\>\>
+- QMap\<QString, QSharedPointer\<class with `Q_GADGET`\>\>
 
 into/from
 
@@ -27,6 +27,5 @@ defined for basic tests for coding examples.
 
 ---
 
-[`QSerializer::DBus`](./libs/dbus/include/qserializer/dbus.h)
-can working with QDBusArgument,
+QSerializer can working with QDBusArgument,
 check [the example](examples/dbus_message) for details of that.
