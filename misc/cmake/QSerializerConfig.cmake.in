@@ -2,6 +2,12 @@
 
 list (APPEND CMAKE_MODULE_PATH "@PACKAGE_cmakeModulesDir@")
 
+include (CMakeFindDependencyMacro)
+
+if(NOT DEFINED QT_VERSION_MAJOR)
+        set (QT_VERSION_MAJOR 6)
+endif()
+
 find_dependency (
         Qt${QT_VERSION_MAJOR}
         COMPONENTS
