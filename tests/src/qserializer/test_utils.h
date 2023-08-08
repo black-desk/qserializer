@@ -1,10 +1,11 @@
 #pragma once
 
-#include <string>      // for enable_if, enable_if_t, is_same
-#include <type_traits> // for enable_if, enable_if_t, is_same
+#include <iosfwd>      // for ostream, basic_ostream
+#include <string>      // for operator<<, string
+#include <type_traits> // for enable_if, is_same
 
-#include <QDebug>
-#include <QString>
+#include <QDebug>  // for QDebug
+#include <QString> // for QString
 
 template <typename T>
 typename std::enable_if<!std::is_same<T, std::string>::value,
