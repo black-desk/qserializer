@@ -38,7 +38,6 @@ class QSerializer {
     private:
         typedef QSharedPointer<T> P;
 
-        static const QMetaObject *const metaObject;
         static QVariantMap PToQVariantMap(P from);
         static P QVariantMapToP(const QVariantMap &map);
 
@@ -68,16 +67,15 @@ void QSerializer<T>::registerConverters()
 }
 
 template <typename T>
-const QMetaObject *const QSerializer<T>::metaObject =
-        QMetaType::fromType<T *>().metaObject();
-
-template <typename T>
 QVariantMap QSerializer<T>::PToQVariantMap(P from)
 {
         auto ret = QVariantMap{};
         if (from.isNull()) {
                 return ret;
         }
+
+        static const QMetaObject *const metaObject =
+                QMetaType::fromType<T *>().metaObject();
 
         for (int i = 0; i < metaObject->propertyCount(); i++) {
                 const char *k = metaObject->property(i).name();
@@ -105,6 +103,10 @@ template <typename T>
 QSharedPointer<T> QSerializer<T>::QVariantMapToP(const QVariantMap &map)
 {
         P ret(new T());
+
+        static const QMetaObject *const metaObject =
+                QMetaType::fromType<T *>().metaObject();
+
         for (int i = 0; i < metaObject->propertyCount(); i++) {
                 QMetaProperty metaProp = metaObject->property(i);
 

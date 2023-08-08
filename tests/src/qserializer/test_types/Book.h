@@ -8,14 +8,14 @@
 #include <QString>        // for QString
 #include <QStringList>    // for QStringList
 
-#include "qserializer/core.h"             // for QSERIALIZER_DECLARE
-#include "qserializer/tests/types/Base.h" // for Base
-#include "qserializer/tests/types/Page.h" // for Page
+#include "qserializer/core.h"            // for QSERIALIZER_DECLARE
+#include "qserializer/test_types/Base.h" // for Base
+#include "qserializer/test_types/Page.h" // for Page
 
 template <class T>
 class QSharedPointer;
 
-namespace qserializer::tests::types
+namespace qserializer::test_types
 {
 
 class Page;
@@ -26,16 +26,14 @@ class Book : public Base {
         // NOTE:
         // Qt5 can not found convertor
         // if type referenced in Q_PROPERTY is not global.
-        Q_PROPERTY(QList<QSharedPointer<qserializer::tests::types::Page> > pages
+        Q_PROPERTY(QList<QSharedPointer<qserializer::test_types::Page> > pages
                            MEMBER m_pages);
-        Q_PROPERTY(
-                QMap<QString, QSharedPointer<qserializer::tests::types::Page> >
-                        dict MEMBER m_dict);
+        Q_PROPERTY(QMap<QString, QSharedPointer<qserializer::test_types::Page> >
+                           dict MEMBER m_dict);
         Q_PROPERTY(QStringList list MEMBER m_list1);
         Q_PROPERTY(QList<QString> list2 MEMBER m_list2);
-        Q_PROPERTY(
-                QMap<QString, QSharedPointer<qserializer::tests::types::Book> >
-                        dict2 MEMBER m_dict2);
+        Q_PROPERTY(QMap<QString, QSharedPointer<qserializer::test_types::Book> >
+                           dict2 MEMBER m_dict2);
 
     public:
         QString m_title;
@@ -52,4 +50,4 @@ class Book : public Base {
 
 }
 
-QSERIALIZER_DECLARE(qserializer::tests::types::Book);
+QSERIALIZER_DECLARE(qserializer::test_types::Book);

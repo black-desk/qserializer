@@ -1,12 +1,16 @@
-add_library (qserializer_core INTERFACE)
+add_library (
+        qserializer_core OBJECT
+        ${PROJECT_SOURCE_DIR}/libs/core/src/qserializer/core.cpp
+        ${PROJECT_SOURCE_DIR}/libs/core/src/qserializer/detail/QSerializer.cpp
+)
 
 target_compile_features (
-        qserializer_core INTERFACE
+        qserializer_core PUBLIC
                                  cxx_std_17
 )
 target_sources (
         qserializer_core
-        INTERFACE
+        PUBLIC
                 FILE_SET public_headers TYPE HEADERS BASE_DIRS
                 ${PROJECT_SOURCE_DIR}/libs/core/include FILES
                 ${PROJECT_SOURCE_DIR}/libs/core/include/qserializer/core.h
@@ -15,20 +19,8 @@ target_sources (
 
 target_link_libraries (
         qserializer_core
-        INTERFACE
+        PUBLIC
                 Qt::Core
 )
 
 add_library (QSerializer::Core ALIAS qserializer_core)
-
-add_library (
-        qserializer_core_CHECK
-        ${CMAKE_CURRENT_SOURCE_DIR}/qserializer/core.check.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/qserializer/detail/QSerializer.check.cpp
-)
-
-target_link_libraries (
-        qserializer_core_CHECK
-        PUBLIC
-                QSerializer::Core
-)

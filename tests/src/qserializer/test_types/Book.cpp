@@ -1,4 +1,4 @@
-#include "qserializer/tests/types/Book.h"
+#include "qserializer/test_types/Book.h"
 
 #include <QtGlobal> // for QT_VERSION, QT_VERSION_CHECK
 
@@ -29,7 +29,7 @@ static void registerQListQStringConveter()
 }
 #endif
 
-QSERIALIZER_IMPL(qserializer::tests::types::Book
+QSERIALIZER_IMPL(qserializer::test_types::Book
 
 #if QT_VERSION <= QT_VERSION_CHECK(6, 2, 0)
                  ,

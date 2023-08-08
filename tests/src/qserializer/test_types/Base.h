@@ -7,7 +7,7 @@
 
 #include "qserializer/core.h" // for QSERIALIZER_DECLARE
 
-namespace qserializer::tests::types
+namespace qserializer::test_types
 {
 
 class Base {
@@ -20,4 +20,4 @@ class Base {
 
 }
 
-QSERIALIZER_DECLARE(qserializer::tests::types::Base);
+QSERIALIZER_DECLARE(qserializer::test_types::Base);

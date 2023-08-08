@@ -1,12 +1,16 @@
-add_library (qserializer_dbus INTERFACE)
+add_library (
+        qserializer_dbus OBJECT
+        ${PROJECT_SOURCE_DIR}/libs/dbus/src/qserializer/dbus.cpp
+        ${PROJECT_SOURCE_DIR}/libs/dbus/src/qserializer/detail/dbus/operators.cpp
+)
 
 target_compile_features (
-        qserializer_dbus INTERFACE
+        qserializer_dbus PUBLIC
                                  cxx_std_17
 )
 target_sources (
         qserializer_dbus
-        INTERFACE
+        PUBLIC
                 FILE_SET public_headers TYPE HEADERS BASE_DIRS
                 ${PROJECT_SOURCE_DIR}/libs/dbus/include FILES
                 ${PROJECT_SOURCE_DIR}/libs/dbus/include/qserializer/dbus.h
@@ -15,20 +19,8 @@ target_sources (
 
 target_link_libraries (
         qserializer_dbus
-        INTERFACE
+        PUBLIC
                 QSerializer::Core Qt::DBus
 )
 
 add_library (QSerializer::DBus ALIAS qserializer_dbus)
-
-add_library (
-        qserializer_dbus_CHECK
-        ${CMAKE_CURRENT_SOURCE_DIR}/qserializer/dbus.check.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/qserializer/detail/dbus/operators.check.cpp
-)
-
-target_link_libraries (
-        qserializer_dbus_CHECK
-        PUBLIC
-                QSerializer::DBus
-)

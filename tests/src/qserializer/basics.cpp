@@ -14,14 +14,14 @@
 #include <QStringList>     // for QStringList
 #include <QVariant>        // for QVariant
 
-#include "qserializer/tests/types/Book.h" // for Book
-#include "qserializer/tests/types/Page.h" // for Page
-#include "qserializer/tests/utils.h"      // IWYU pragma: keep
+#include "qserializer/test_types/Book.h" // for Book
+#include "qserializer/test_types/Page.h" // for Page
+#include "qserializer/test_utils.h"      // IWYU pragma: keep
 
 template <class T>
 class QSharedPointer;
 
-namespace qserializer::tests
+namespace qserializer
 {
 
 TEST(QSerializer, Basic)
@@ -58,7 +58,7 @@ TEST(QSerializer, Basic)
         ASSERT_EQ(err.error, QJsonParseError::NoError);
 
         QVariant v = doc.object().toVariantMap();
-        auto book = v.value<QSharedPointer<types::Book>>();
+        auto book = v.value<QSharedPointer<test_types::Book>>();
 
         ASSERT_NE(book, nullptr);
         ASSERT_EQ(book->m_title, "Some title");
@@ -165,7 +165,7 @@ TEST(QSerializer, Basic)
 
         v = jsonObject.toVariantMap();
 
-        auto book2 = v.value<QSharedPointer<types::Book>>();
+        auto book2 = v.value<QSharedPointer<test_types::Book>>();
 
         ASSERT_NE(book2, nullptr);
         ASSERT_EQ(book2->m_title, "Some title");

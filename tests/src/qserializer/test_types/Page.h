@@ -4,10 +4,10 @@
 #include <QObject>        // for Q_GADGET, Q_PROPERTY
 #include <QSharedPointer> // for QSharedPointer
 
-#include "qserializer/core.h"             // for QSERIALIZER_DECLARE
-#include "qserializer/tests/types/Base.h" // for Base
+#include "qserializer/core.h"            // for QSERIALIZER_DECLARE
+#include "qserializer/test_types/Base.h" // for Base
 
-namespace qserializer::tests::types
+namespace qserializer::test_types
 {
 
 class Page : public Base {
@@ -20,4 +20,4 @@ class Page : public Base {
 
 }
 
-QSERIALIZER_DECLARE(qserializer::tests::types::Page);
+QSERIALIZER_DECLARE(qserializer::test_types::Page);
