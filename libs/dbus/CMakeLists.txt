@@ -2,6 +2,13 @@ if(NOT QSERIALIZER_ENABLE_DBUS)
         return ()
 endif()
 
+if(NOT QT_DBUS_FOUND)
+        message (
+                FATAL_ERROR
+                        "QSerializer::DBus need Qt::DBus."
+        )
+endif()
+
 add_subdirectory (src)
 
 if(NOT QSERIALIZER_ENABLE_INSTALL)

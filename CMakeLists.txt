@@ -8,29 +8,16 @@ project (
         LANGUAGES
                 CXX
 )
-# cmake-format: off
-set (
-        QT_VERSION_MAJOR "6"
-        CACHE STRING "The qt major version tests and examples link to."
-)
-# cmake-format: on
 
 set (CMAKE_AUTOMOC ON)
 set (CMAKE_AUTORCC ON)
 set (CMAKE_AUTOUIC ON)
 
-find_package (
-        Qt${QT_VERSION_MAJOR}
-        COMPONENTS
-                Core
-        REQUIRED
-)
+macro(qserializer_find_dependency)
+        find_package (${ARGN})
+endmacro()
 
-find_package (
-        Qt${QT_VERSION_MAJOR}
-        COMPONENTS
-                DBus
-)
+include (${PROJECT_SOURCE_DIR}/misc/cmake/FindQSerializerDependencies.cmake)
 
 if(TARGET Qt::DBus)
         set (QT_DBUS_FOUND ON)
@@ -56,9 +43,6 @@ set (
         QSERIALIZER_ENABLE_DBUS ${QT_DBUS_FOUND}
         CACHE BOOL "Enable DBus support."
 )
-
-message ( STATUS "QSerializer build with QT${QT_VERSION_MAJOR}" )
-
 # cmake-format: on
 
 add_subdirectory (libs)
@@ -103,6 +87,7 @@ configure_package_config_file(
 # cmake-format: off
 install (
         FILES
+                ${PROJECT_SOURCE_DIR}/misc/cmake/FindQSerializerDependencies.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/misc/cmake/QSerializerConfig.cmake
         DESTINATION
                 ${CMAKE_INSTALL_LIBDIR}/cmake/QSerializer
