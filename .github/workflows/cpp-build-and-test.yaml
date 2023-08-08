@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - uses: hendrikmuhs/ccache-action@v1.2
       with:
         key: ${{ github.job }}-${{ matrix.compiler }}-qt${{ matrix.qt-version }}
