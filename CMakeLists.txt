@@ -57,7 +57,6 @@ if(QSERIALIZER_ENABLE_TESTING)
         # Build tests
         include (CTest)
         include (GoogleTest)
-        enable_testing ()
         find_package (GTest REQUIRED)
         add_subdirectory (tests)
 endif()
