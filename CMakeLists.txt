@@ -11,12 +11,9 @@ project (
                 0.1.0
 )
 
-if(PROJECT_IS_TOP_LEVEL)
-        include (${PROJECT_SOURCE_DIR}/misc/cmake/GetSemverFromGit.cmake)
-        qserializer_get_semver_from_git (QSERIALIZER_SEMVER)
-else()
-        set (QSERIALIZER_SEMVER ${PROJECT_VERSION})
-endif()
+include (${PROJECT_SOURCE_DIR}/misc/cmake/GetSemverFromGit.cmake)
+set (QSERIALIZER_SEMVER ${PROJECT_VERSION})
+qserializer_get_semver_from_git (QSERIALIZER_SEMVER)
 
 set (CMAKE_AUTOMOC ON)
 set (CMAKE_AUTORCC ON)

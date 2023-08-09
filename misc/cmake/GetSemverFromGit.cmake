@@ -1,4 +1,8 @@
 function(qserializer_get_semver_from_git varname)
+        if(NOT PROJECT_IS_TOP_LEVEL)
+                return ()
+        endif()
+
         find_package (Git REQUIRED)
         # cmake-format: off
         execute_process (
@@ -16,16 +20,20 @@ function(qserializer_get_semver_from_git varname)
                         sed -e s/+\$//
                 OUTPUT_VARIABLE
                         ${varname}
-                RESULT_VARIABLE ret
+                RESULTS_VARIABLE  rets
                 OUTPUT_STRIP_TRAILING_WHITESPACE
-                COMMAND_ERROR_IS_FATAL ANY
                 COMMAND_ECHO STDOUT
         )
+
+        foreach(ret ${rets})
+                if(NOT ret EQUAL 0)
+                        return ()
+                endif()
+        endforeach()
+
+        message (STATUS "Get semver from git repository: ${${varname}}")
         # cmake-format: on
-        message (
-                STATUS
-                        "get semver from git: ${${varname}}"
-        )
+
         set (
                 ${varname}
                 ${${varname}}
