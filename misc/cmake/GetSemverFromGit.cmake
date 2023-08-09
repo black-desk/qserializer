@@ -3,21 +3,22 @@ function(qserializer_get_semver_from_git varname)
                 return ()
         endif()
 
-        find_package (Git REQUIRED)
         # cmake-format: off
+        find_package (Git REQUIRED)
+        find_program (SED_EXECUTABLE NAMES sed REQUIRED)
         execute_process (
                 COMMAND
                         ${GIT_EXECUTABLE} describe --tags --long --dirty
                 COMMAND
-                        sed -e s/-\\\([[:digit:]]\\+\\\)-g/+\\1\\./
+                        ${SED_EXECUTABLE} -e s/-\\\([[:digit:]]\\+\\\)-g/+\\1\\./
                 COMMAND
-                        sed -e s/-dirty\$/\\.dirty/
+                        ${SED_EXECUTABLE} -e s/-dirty\$/\\.dirty/
                 COMMAND
-                        sed -e s/+0\\.[^\\.]\\+\\.\\?/+/
+                        ${SED_EXECUTABLE} -e s/+0\\.[^\\.]\\+\\.\\?/+/
                 COMMAND
-                        sed -e s/^v//
+                        ${SED_EXECUTABLE} -e s/^v//
                 COMMAND
-                        sed -e s/+\$//
+                        ${SED_EXECUTABLE} -e s/+\$//
                 OUTPUT_VARIABLE
                         ${varname}
                 RESULTS_VARIABLE  rets
