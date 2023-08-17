@@ -38,15 +38,15 @@ class QSerializer {
     private:
         typedef QSharedPointer<T> P;
 
-        static QVariantMap PToQVariantMap(P from);
-        static P QVariantMapToP(const QVariantMap &map);
+        static QVariantMap PToQVariantMap(P from) noexcept;
+        static P QVariantMapToP(const QVariantMap &map) noexcept;
 
-        static QVariantList PListToQVariantList(QList<P> list);
+        static QVariantList PListToQVariantList(QList<P> list) noexcept;
 
-        static QList<P> QVariantListToPList(QVariantList list);
+        static QList<P> QVariantListToPList(QVariantList list) noexcept;
 
-        static QVariantMap PStrMapToQVariantMap(QMap<QString, P> map);
-        static QMap<QString, P> QVariantMapToPStrMap(QVariantMap map);
+        static QVariantMap PStrMapToQVariantMap(QMap<QString, P> map) noexcept;
+        static QMap<QString, P> QVariantMapToPStrMap(QVariantMap map) noexcept;
 };
 
 template <typename T>
@@ -67,7 +67,7 @@ void QSerializer<T>::registerConverters()
 }
 
 template <typename T>
-QVariantMap QSerializer<T>::PToQVariantMap(P from)
+QVariantMap QSerializer<T>::PToQVariantMap(P from) noexcept
 {
         auto ret = QVariantMap{};
         if (from.isNull()) {
@@ -100,7 +100,8 @@ QVariantMap QSerializer<T>::PToQVariantMap(P from)
 }
 
 template <typename T>
-QSharedPointer<T> QSerializer<T>::QVariantMapToP(const QVariantMap &map)
+QSharedPointer<T>
+QSerializer<T>::QVariantMapToP(const QVariantMap &map) noexcept
 {
         P ret(new T());
 
@@ -129,7 +130,7 @@ QSharedPointer<T> QSerializer<T>::QVariantMapToP(const QVariantMap &map)
 }
 
 template <typename T>
-QVariantList QSerializer<T>::PListToQVariantList(QList<P> list)
+QVariantList QSerializer<T>::PListToQVariantList(QList<P> list) noexcept
 {
         auto ret = QVariantList{};
         for (auto const &item : list) {
@@ -139,7 +140,8 @@ QVariantList QSerializer<T>::PListToQVariantList(QList<P> list)
 }
 
 template <typename T>
-QList<QSharedPointer<T> > QSerializer<T>::QVariantListToPList(QVariantList list)
+QList<QSharedPointer<T>>
+QSerializer<T>::QVariantListToPList(QVariantList list) noexcept
 {
         auto ret = QList<P>{};
         for (auto const &item : list) {
@@ -149,7 +151,7 @@ QList<QSharedPointer<T> > QSerializer<T>::QVariantListToPList(QVariantList list)
 }
 
 template <typename T>
-QVariantMap QSerializer<T>::PStrMapToQVariantMap(QMap<QString, P> map)
+QVariantMap QSerializer<T>::PStrMapToQVariantMap(QMap<QString, P> map) noexcept
 {
         auto ret = QVariantMap{};
         for (auto it = map.begin(); it != map.end(); it++) {
@@ -159,8 +161,8 @@ QVariantMap QSerializer<T>::PStrMapToQVariantMap(QMap<QString, P> map)
 }
 
 template <typename T>
-QMap<QString, QSharedPointer<T> >
-QSerializer<T>::QVariantMapToPStrMap(QVariantMap map)
+QMap<QString, QSharedPointer<T>>
+QSerializer<T>::QVariantMapToPStrMap(QVariantMap map) noexcept
 {
         auto ret = QMap<QString, P>{};
         for (auto it = map.begin(); it != map.end(); it++) {
@@ -168,4 +170,5 @@ QSerializer<T>::QVariantMapToPStrMap(QVariantMap map)
         }
         return ret;
 }
+
 }

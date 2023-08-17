@@ -19,14 +19,14 @@
         QSERIALIZER_DECLARE_SHAREDPOINTER_METATYPE(T); \
         namespace qserializer::detail::init::T         \
         {                                              \
-        char init();                                   \
+        char init() noexcept;                          \
         static char _ = init();                        \
         };
 
 #define QSERIALIZER_IMPL(T, ...)                                \
         namespace qserializer::detail::init::T                  \
         {                                                       \
-        char init()                                             \
+        char init() noexcept                                    \
         {                                                       \
                 static char _ = []() -> char {                  \
                         QSerializer<::T>::registerConverters(); \
