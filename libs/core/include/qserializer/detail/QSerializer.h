@@ -57,12 +57,12 @@ void QSerializer<T>::registerConverters()
 
         QMetaType::registerConverter<QList<P>, QVariantList>(
                 PListToQVariantList);
-        QMetaType::registerConverter<QVariantList, QList<P> >(
+        QMetaType::registerConverter<QVariantList, QList<P>>(
                 QVariantListToPList);
 
         QMetaType::registerConverter<QMap<QString, P>, QVariantMap>(
                 PStrMapToQVariantMap);
-        QMetaType::registerConverter<QVariantMap, QMap<QString, P> >(
+        QMetaType::registerConverter<QVariantMap, QMap<QString, P>>(
                 QVariantMapToPStrMap);
 }
 
@@ -103,10 +103,11 @@ template <typename T>
 QSharedPointer<T>
 QSerializer<T>::QVariantMapToP(const QVariantMap &map) noexcept
 {
-        P ret(new T());
+        QSharedPointer<std::remove_const_t<T>> ret(
+                new std::remove_const_t<T>());
 
         static const QMetaObject *const metaObject =
-                QMetaType::fromType<T *>().metaObject();
+                QMetaType::fromType<std::remove_const_t<T> *>().metaObject();
 
         for (int i = 0; i < metaObject->propertyCount(); i++) {
                 QMetaProperty metaProp = metaObject->property(i);
