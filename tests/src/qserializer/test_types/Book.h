@@ -26,26 +26,25 @@ class Book : public Base {
         // NOTE:
         // Qt5 can not found convertor
         // if type referenced in Q_PROPERTY is not global.
-        Q_PROPERTY(QList<QSharedPointer<const qserializer::test_types::Page> >
-                           pages MEMBER m_pages);
-        Q_PROPERTY(QMap<QString, QSharedPointer<qserializer::test_types::Page> >
-                           dict MEMBER m_dict);
+        Q_PROPERTY(QList<qserializer::test_types::Page> pages MEMBER m_pages);
+        Q_PROPERTY(QMap<QString, qserializer::test_types::Page> dict MEMBER
+                           m_dict);
         Q_PROPERTY(QStringList list MEMBER m_list1);
         Q_PROPERTY(QList<QString> list2 MEMBER m_list2);
-        Q_PROPERTY(QMap<QString, QSharedPointer<qserializer::test_types::Book> >
-                           dict2 MEMBER m_dict2);
+        Q_PROPERTY(QMap<QString, qserializer::test_types::Book> dict2 MEMBER
+                           m_dict2);
 
     public:
         QString m_title;
-        QList<QSharedPointer<const Page> > m_pages;
-        QMap<QString, QSharedPointer<Page> > m_dict;
+        QList<Page> m_pages;
+        QMap<QString, Page> m_dict;
         QStringList m_list1;
         // NOTE:
         // Qt5 cannot convert QList<QString> to QVariantList by default.
         // You need a custom converter registered to make QSerializer work,
         // check Book.cpp for details.
         QList<QString> m_list2;
-        QMap<QString, QSharedPointer<Book> > m_dict2;
+        QMap<QString, Book> m_dict2;
 };
 
 }

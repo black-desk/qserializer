@@ -28,58 +28,65 @@ static inline Q_LOGGING_CATEGORY(log, "qserializer");
 template <typename T>
 class QSerializer {
     public:
-        static_assert(!std::is_pointer<T>::value,
-                      "QSerializer shouldn't instantiation with a pointer.");
-        static_assert(!std::is_base_of<QObject, T>::value,
-                      "QSerializer shouldn't instantiation with a QObject.");
-
+        static_assert(!std::is_const_v<T>,
+                      "QSerializer shouldn't instantiation with constant type.");
+        static_assert(
+                !std::is_reference_v<T>,
+                "QSerializer shouldn't instantiation with reference type.");
         static void registerConverters();
 
     private:
-        typedef QSharedPointer<T> P;
+        static QVariantMap ToQVariantMap(const T &from) noexcept;
+        static T FromQVariantMap(const QVariantMap &map) noexcept;
 
-        static QVariantMap PToQVariantMap(P from) noexcept;
-        static P QVariantMapToP(const QVariantMap &map) noexcept;
+        static QVariantList ListToQVariantList(const QList<T> &list) noexcept;
+        static QList<T> ListFromQVariantList(const QVariantList &list) noexcept;
 
-        static QVariantList PListToQVariantList(QList<P> list) noexcept;
-
-        static QList<P> QVariantListToPList(QVariantList list) noexcept;
-
-        static QVariantMap PStrMapToQVariantMap(QMap<QString, P> map) noexcept;
-        static QMap<QString, P> QVariantMapToPStrMap(QVariantMap map) noexcept;
+        static QVariantMap
+        TMapToQVariantMap(const QMap<QString, T> &map) noexcept;
+        static QMap<QString, T>
+        TMapFromQVariantMap(const QVariantMap &map) noexcept;
 };
 
 template <typename T>
 void QSerializer<T>::registerConverters()
 {
-        QMetaType::registerConverter<P, QVariantMap>(PToQVariantMap);
-        QMetaType::registerConverter<QVariantMap, P>(QVariantMapToP);
+        QMetaType::registerConverter<T, QVariantMap>(ToQVariantMap);
+        QMetaType::registerConverter<QVariantMap, T>(FromQVariantMap);
 
-        QMetaType::registerConverter<QList<P>, QVariantList>(
-                PListToQVariantList);
-        QMetaType::registerConverter<QVariantList, QList<P>>(
-                QVariantListToPList);
+        QMetaType::registerConverter<QList<T>, QVariantList>(
+                ListToQVariantList);
+        QMetaType::registerConverter<QVariantList, QList<T>>(
+                ListFromQVariantList);
 
-        QMetaType::registerConverter<QMap<QString, P>, QVariantMap>(
-                PStrMapToQVariantMap);
-        QMetaType::registerConverter<QVariantMap, QMap<QString, P>>(
-                QVariantMapToPStrMap);
+        QMetaType::registerConverter<QMap<QString, T>, QVariantMap>(
+                TMapToQVariantMap);
+        QMetaType::registerConverter<QVariantMap, QMap<QString, T>>(
+                TMapFromQVariantMap);
 }
 
 template <typename T>
-QVariantMap QSerializer<T>::PToQVariantMap(P from) noexcept
+QVariantMap QSerializer<T>::ToQVariantMap(const T &from) noexcept
 {
         auto ret = QVariantMap{};
-        if (from.isNull()) {
-                return ret;
+
+        if (std::is_pointer_v<T>(from)) {
+                if (from == nullptr) {
+                        return ret;
+                }
         }
 
         static const QMetaObject *const metaObject =
-                QMetaType::fromType<T *>().metaObject();
+                QMetaType::fromType<T>().metaObject();
+        assert(("qserializer: pointer to metaObject is nullptr.",
+                metaObject != nullptr));
 
         for (int i = 0; i < metaObject->propertyCount(); i++) {
                 const char *k = metaObject->property(i).name();
-                QVariant v = metaObject->property(i).readOnGadget(from.data());
+                QVariant v =
+                        std::is_base_of_v<T, QObject> ?
+                                metaObject->property(i).read(&from) :
+                                metaObject->property(i).readOnGadget(&from);
                 if (v.canConvert<QString>()) {
                         ret.insert(k, v);
                         continue;
@@ -100,14 +107,15 @@ QVariantMap QSerializer<T>::PToQVariantMap(P from) noexcept
 }
 
 template <typename T>
-QSharedPointer<T>
-QSerializer<T>::QVariantMapToP(const QVariantMap &map) noexcept
+T QSerializer<T>::FromQVariantMap(const QVariantMap &map) noexcept
 {
         QSharedPointer<std::remove_const_t<T>> ret(
                 new std::remove_const_t<T>());
 
         static const QMetaObject *const metaObject =
                 QMetaType::fromType<std::remove_const_t<T> *>().metaObject();
+        assert(("qserializer: pointer to metaObject is nullptr.",
+                metaObject != nullptr));
 
         for (int i = 0; i < metaObject->propertyCount(); i++) {
                 QMetaProperty metaProp = metaObject->property(i);
@@ -118,7 +126,12 @@ QSerializer<T>::QVariantMapToP(const QVariantMap &map) noexcept
                         continue;
                 }
 
-                if (metaProp.writeOnGadget(ret.data(), it.value())) {
+                const bool &writeResult =
+                        std::is_base_of_v<T, QObject> ?
+                                metaProp.write(&ret, it.value()) :
+                                metaProp.writeOnGadget(&ret, it.value());
+
+                if (writeResult) {
                         continue;
                 }
 
@@ -131,7 +144,7 @@ QSerializer<T>::QVariantMapToP(const QVariantMap &map) noexcept
 }
 
 template <typename T>
-QVariantList QSerializer<T>::PListToQVariantList(QList<P> list) noexcept
+QVariantList QSerializer<T>::ListToQVariantList(const QList<T> &list) noexcept
 {
         auto ret = QVariantList{};
         for (auto const &item : list) {
@@ -141,18 +154,18 @@ QVariantList QSerializer<T>::PListToQVariantList(QList<P> list) noexcept
 }
 
 template <typename T>
-QList<QSharedPointer<T>>
-QSerializer<T>::QVariantListToPList(QVariantList list) noexcept
+QList<T> QSerializer<T>::ListFromQVariantList(const QVariantList &list) noexcept
 {
-        auto ret = QList<P>{};
+        auto ret = QList<T>{};
         for (auto const &item : list) {
-                ret.push_back(QVariantMapToP(item.toMap()));
+                ret.push_back(FromQVariantMap(item.toMap()));
         }
         return ret;
 }
 
 template <typename T>
-QVariantMap QSerializer<T>::PStrMapToQVariantMap(QMap<QString, P> map) noexcept
+QVariantMap
+QSerializer<T>::TMapToQVariantMap(const QMap<QString, T> &map) noexcept
 {
         auto ret = QVariantMap{};
         for (auto it = map.begin(); it != map.end(); it++) {
@@ -162,12 +175,13 @@ QVariantMap QSerializer<T>::PStrMapToQVariantMap(QMap<QString, P> map) noexcept
 }
 
 template <typename T>
-QMap<QString, QSharedPointer<T>>
-QSerializer<T>::QVariantMapToPStrMap(QVariantMap map) noexcept
+QMap<QString, T>
+QSerializer<T>::TMapFromQVariantMap(const QVariantMap &map) noexcept
 {
-        auto ret = QMap<QString, P>{};
+        auto ret = QMap<QString, T>{};
         for (auto it = map.begin(); it != map.end(); it++) {
-                ret.insert(it.key(), QVariantMapToP(it.value().toMap()));
+                ret.insert(it.key(),
+                           std::move(FromQVariantMap(it.value().toMap())));
         }
         return ret;
 }

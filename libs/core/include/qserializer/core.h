@@ -32,7 +32,6 @@
         {                                                             \
                 static char _ = []() -> char {                        \
                         QSerializer<::T>::registerConverters();       \
-                        QSerializer<const ::T>::registerConverters(); \
                         __VA_ARGS__;                                  \
                         return 0;                                     \
                 }();                                                  \
